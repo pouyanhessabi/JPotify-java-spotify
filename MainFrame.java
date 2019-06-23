@@ -15,7 +15,7 @@ public class MainFrame extends JFrame {
     int i = 0;
     String pathSong;
     int counter1 = 0;
-    Album album = new Album("myAlbume");
+    Album album = new Album("library");
     ActionListenerForButtonInCenterPanel actionListenerForButtonInCenterPanel = new ActionListenerForButtonInCenterPanel();
     private CenterPanel centerPanel = new CenterPanel();
 
@@ -53,7 +53,7 @@ public class MainFrame extends JFrame {
                 album.setSong(song);
                 centerPanel.setButten(song);
 
-//                Image temp=new ImageIcon(song.getImageData()).getImage().getScaledInstance(100,100,Image.SCALE_DEFAULT);
+//                Image tem p=new ImageIcon(song.getImageData()).getImage().getScaledInstance(100,100,Image.SCALE_DEFAULT);
 //                JButton jButton1=new JButton();
 //                jButton1.setBorderPainted(false);
 //                jButton1.setFocusPainted(false);
@@ -121,8 +121,9 @@ public class MainFrame extends JFrame {
     private class ActionListenerForButtonInCenterPanel implements ActionListener {
         @Override
         public synchronized void actionPerformed(ActionEvent e) {
-            if (counter1 != 0)
-                musicPlayer.stop();
+            if (counter1 != 0){
+                musicPlayer.player.close();
+            }
             for (int j = 0; j < album.getSongs().size(); j++) {
                 if (album.getSongs().get(j).getName().equals(e.getActionCommand())) {
                     System.out.println(e.getActionCommand() + "  " + album.getSongs().get(j).getName() + "  " + j + "   " + album.getSongs().size());
@@ -150,4 +151,10 @@ public class MainFrame extends JFrame {
             counter=0;
         }
     }
+    private class ActionListenerFornext implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+        }
 }
