@@ -41,9 +41,7 @@ public class MusicPlayer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("a");
         player.close();
-        System.out.println("b");
     }
     public void stop()
     {

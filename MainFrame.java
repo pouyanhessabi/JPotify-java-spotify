@@ -6,39 +6,43 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class MainFrame extends JFrame {
-    MusicPlayer musicPlayer=new MusicPlayer();
-    private RightPanel rightPanel=new RightPanel();
-    SouthPanel southPanel=new SouthPanel();
+    MusicPlayer musicPlayer = new MusicPlayer();
+    private RightPanel rightPanel = new RightPanel();
+    SouthPanel southPanel = new SouthPanel();
     JLabel jLabel;
     private int counter;
     Song song;
-    int i=0;
+    int i = 0;
     String pathSong;
-    int counter1=0;
-    Album album=new Album("myAlbume");
-    ActionListenerForButtonInCenterPanel actionListenerForButtonInCenterPanel=new ActionListenerForButtonInCenterPanel();
-    private CenterPanel centerPanel=new CenterPanel();
+    int counter1 = 0;
+    Album album = new Album("myAlbume");
+    ActionListenerForButtonInCenterPanel actionListenerForButtonInCenterPanel = new ActionListenerForButtonInCenterPanel();
+    private CenterPanel centerPanel = new CenterPanel();
+
     public MainFrame() {
-        counter=0;
+        counter = 0;
         this.setTitle("Binarify");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1300, 700);
         LeftPanel leftPanel = new LeftPanel();
         this.add(leftPanel, BorderLayout.WEST);
-        this.add(southPanel,BorderLayout.PAGE_END);
-        this.add(rightPanel,BorderLayout.EAST);
-        this.getContentPane().add(centerPanel,BorderLayout.CENTER);
+        this.add(southPanel, BorderLayout.PAGE_END);
+        this.add(rightPanel, BorderLayout.EAST);
+        this.getContentPane().add(centerPanel, BorderLayout.CENTER);
         this.setVisible(true);
-        MyListener myListener=new MyListener();
+        MyListener myListener = new MyListener();
         leftPanel.getAddToLibraryIcon().addActionListener(myListener);
-        SongsButten songsButten=new SongsButten();
+        SongsButten songsButten = new SongsButten();
         leftPanel.songs.addActionListener(songsButten);
         southPanel.getPlayIcon().addActionListener(new ActionListenerForPlay());
+        southPanel.getStopIcon().addActionListener(new ActionListenerForStopButten());
+
     }
+
     private class MyListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
             JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-            String name="",path="";
+            String name = "", path = "";
             int returnValue = jfc.showOpenDialog(null);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = jfc.getSelectedFile();
@@ -59,6 +63,7 @@ public class MainFrame extends JFrame {
 
         }
     }
+
     private class SongsButten implements ActionListener {
         public void actionPerformed(ActionEvent event) {
             centerPanel.setVisible(false);
@@ -72,16 +77,27 @@ public class MainFrame extends JFrame {
 //                centerPanel.add(jButton1,FlowLayout.LEFT);
 //            }
             centerPanel.setVisible(true);
-            for (int j = 0; j <centerPanel.jButtonsForSong.size() ; j++) {
+            for (int j = 0; j < centerPanel.jButtonsForSong.size(); j++) {
                 centerPanel.jButtonsForSong.get(j).addActionListener(actionListenerForButtonInCenterPanel);
             }
         }
-        }
+    }
+
     private class ActionListenerForPlay implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println(counter);
-            if(counter%2==0) {
+            if(counter==0)
+            {
+                try {
+                    musicPlayer.play(pathSong);
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+                southPanel.getPlayIcon().setIcon(new ImageIcon("icons/pause.png"));
+
+            }
+            else if (counter % 2 == 0) {
                 southPanel.getPlayIcon().setIcon(new ImageIcon("icons/pause.png"));
                 try {
                     musicPlayer.resume(pathSong);
@@ -95,34 +111,43 @@ public class MainFrame extends JFrame {
             else {
                 System.out.println(pathSong);
                 southPanel.getPlayIcon().setIcon(new ImageIcon("icons/play.png"));
-               musicPlayer.pause();
+                musicPlayer.pause();
             }
             counter++;
 
         }
     }
+
     private class ActionListenerForButtonInCenterPanel implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent e) {
-            if (counter1!=0)
+        public synchronized void actionPerformed(ActionEvent e) {
+            if (counter1 != 0)
                 musicPlayer.stop();
-            for (int j = 0; j <album.getSongs().size() ; j++) {
-                System.out.println(e.getActionCommand()+"  "+album.getSongs().get(j).getName()+"  "+j+ "   "+album.getSongs().size());
-
-                if(album.getSongs().get(j).getName().equals(e.getActionCommand()))
-                {
-                    pathSong=album.getSongs().get(j).getPath();
+            for (int j = 0; j < album.getSongs().size(); j++) {
+                if (album.getSongs().get(j).getName().equals(e.getActionCommand())) {
+                    System.out.println(e.getActionCommand() + "  " + album.getSongs().get(j).getName() + "  " + j + "   " + album.getSongs().size());
+                    pathSong = album.getSongs().get(j).getPath();
                     try {
                         musicPlayer.play(album.getSongs().get(j).getPath());
                         southPanel.getPlayIcon().setIcon(new ImageIcon("icons/pause.png"));
-                        counter=1;
+                        j=album.getSongs().size();
+                        counter = 1;
                         break;
                     } catch (FileNotFoundException e1) {
                         e1.printStackTrace();
                     }
                 }
             }
-            counter1=1;
+            counter1 = 1;
+        }
+    }
+
+    private class ActionListenerForStopButten implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            southPanel.getPlayIcon().setIcon(new ImageIcon("icons/play.png"));
+            musicPlayer.stop();
+            counter=0;
         }
     }
 }

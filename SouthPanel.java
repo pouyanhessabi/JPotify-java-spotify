@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 public class SouthPanel extends JPanel {
     private IconForButton playIcon;
+    private IconForButton stopIcon;
 
     public SouthPanel() {
         this.setBackground(Color.black);
@@ -19,8 +20,7 @@ public class SouthPanel extends JPanel {
 
         IconForButton nextIcon=new IconForButton("icons/next.png");
         this.add(nextIcon);
-
-        IconForButton stopIcon=new IconForButton("icons/stop.png");
+        stopIcon=new IconForButton("icons/stop.png");
         this.add(stopIcon);
 
         JSlider volumeIcon=new JSlider();
@@ -30,6 +30,10 @@ public class SouthPanel extends JPanel {
         JSlider movingBarIcon=new JSlider();
         movingBarIcon.setPreferredSize(new Dimension(900,20));
         this.add(movingBarIcon);
+    }
+
+    public IconForButton getStopIcon() {
+        return stopIcon;
     }
 
     public IconForButton getPlayIcon() {
