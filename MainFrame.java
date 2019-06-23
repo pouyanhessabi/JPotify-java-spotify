@@ -20,7 +20,9 @@ public class MainFrame extends JFrame {
     private CenterPanel centerPanel = new CenterPanel();
 
     public MainFrame() {
-        counter = 0;
+        counter = 1;
+        counter=0;
+
         this.setTitle("Binarify");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1300, 700);
