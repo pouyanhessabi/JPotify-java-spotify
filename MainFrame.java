@@ -45,6 +45,16 @@ public class MainFrame extends JFrame {
         southPanel.getPlayIcon().addActionListener(new ActionListenerForPlay());
         southPanel.getStopIcon().addActionListener(new ActionListenerForStopButten());
         leftPanel.getAlbums().addActionListener(new ActionListenerForAlbumButton());
+
+        //Pjadid
+        JScrollPane scrollPane=new JScrollPane();
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setViewportView(leftPanel);
+        this.add(scrollPane,BorderLayout.WEST);
+        this.pack();
+        //Pjadid
+
+
     }
 //    public void copyLibrary()
     {
