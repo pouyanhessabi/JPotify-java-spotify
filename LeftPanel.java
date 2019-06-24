@@ -9,7 +9,8 @@ import java.util.Random;
 
 public class LeftPanel extends JPanel {
     private JButton addToLibraryIcon= new JButton(new ImageIcon("icons/plus.jpg"));
-    ButtonForLeftPanel songs;
+    private ButtonForLeftPanel songs;
+    private ButtonForLeftPanel albums;
     public LeftPanel() {
         this.setBackground(Color.DARK_GRAY);
         this.setPreferredSize(new Dimension(200, 100));
@@ -38,7 +39,7 @@ public class LeftPanel extends JPanel {
         songs.setLocation(30,90);
         this.add(songs);
 
-        ButtonForLeftPanel albums=new ButtonForLeftPanel("Albums");
+        albums=new ButtonForLeftPanel("Albums");
         albums.setLocation(30, 135);
         this.add(albums);
 
@@ -94,5 +95,13 @@ public class LeftPanel extends JPanel {
 
     public JButton getAddToLibraryIcon() {
         return addToLibraryIcon;
+    }
+
+    public ButtonForLeftPanel getAlbums() {
+        return albums;
+    }
+
+    public ButtonForLeftPanel getSongs() {
+        return songs;
     }
 }

@@ -13,7 +13,10 @@ public class Album {
     {
         songs.add(song);
     }
-
+    public void removeSong(Song song)
+    {
+        songs.remove(song);
+    }
     public ArrayList<Song> getSongs() {
         return songs;
     }

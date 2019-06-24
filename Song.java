@@ -103,6 +103,10 @@ public class Song {
         return name;
     }
 
+    public String getAlbumName() {
+        return AlbumName;
+    }
+
     public void print()
     {
         System.out.println(artistName);
