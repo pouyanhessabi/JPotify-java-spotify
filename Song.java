@@ -9,6 +9,7 @@ import java.io.IOException;
 public class Song {
     private String path;
     private String name;
+    private String AlbumName;
     private String artistName;
     private Mp3File mp3file;
     private  ID3v2 id3v2Tag;
@@ -21,6 +22,7 @@ public class Song {
         creatMp3File();
         setArtistName();
         songPic();
+        setAlbumName();
 //        setName();
 //        print();
     }
@@ -70,6 +72,14 @@ public class Song {
         if (mp3file.hasId3v2Tag()) {
             ID3v2 id3v2Tag = mp3file.getId3v2Tag();
             artistName = id3v2Tag.getAlbumArtist();
+        }
+    }
+    public void setAlbumName()
+    {
+        if(mp3file.hasId3v2Tag())
+        {
+            ID3v2 id3v2Tag = mp3file.getId3v2Tag();
+            AlbumName=id3v2Tag.getAlbum();
         }
     }
 

@@ -107,11 +107,9 @@ public class MainFrame extends JFrame {
                     e1.printStackTrace();
                 }
 
-                System.out.println(pathSong);
             }
 //
             else {
-                System.out.println(pathSong);
                 southPanel.getPlayIcon().setIcon(new ImageIcon("icons/play.png"));
                 musicPlayer.pause();
             }
@@ -119,29 +117,29 @@ public class MainFrame extends JFrame {
 
         }
     }
-
     private class ActionListenerForButtonInCenterPanel implements ActionListener {
         @Override
         public synchronized void actionPerformed(ActionEvent e) {
             if (counter1 != 0){
+                counter=0;
                 musicPlayer.player.close();
             }
-            for (int j = 0; j < album.getSongs().size(); j++) {
+            int j=0;
+            for ( ; j < album.getSongs().size(); j++) {
                 if (album.getSongs().get(j).getName().equals(e.getActionCommand())) {
                     System.out.println(e.getActionCommand() + "  " + album.getSongs().get(j).getName() + "  " + j + "   " + album.getSongs().size());
                     pathSong = album.getSongs().get(j).getPath();
-                    try {
-                        musicPlayer.play(album.getSongs().get(j).getPath());
-                        southPanel.getPlayIcon().setIcon(new ImageIcon("icons/pause.png"));
-                        j=album.getSongs().size();
-                        counter = 1;
-                        break;
-                    } catch (FileNotFoundException e1) {
-                        e1.printStackTrace();
-                    }
+                    southPanel.getPlayIcon().setIcon(new ImageIcon("icons/pause.png"));
+                    counter = 1;
+                    break;
                 }
             }
-            counter1 = 1;
+                try {
+                    musicPlayer.play(album.getSongs().get(j).getPath());
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+                counter1 = 1;
         }
     }
 
