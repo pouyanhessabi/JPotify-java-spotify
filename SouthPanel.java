@@ -6,19 +6,20 @@ import java.awt.event.ActionListener;
 public class SouthPanel extends JPanel {
     private IconForButton playIcon;
     private IconForButton stopIcon;
-
+    private IconForButton nextIcon;
+    private IconForButton previousIcon;
     public SouthPanel() {
         this.setBackground(Color.black);
         this.setPreferredSize(new Dimension(500,100));
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        IconForButton previousIcon=new IconForButton("icons/previous.png");
+        previousIcon=new IconForButton("icons/previous.png");
         this.add(previousIcon);
 
         playIcon=new IconForButton("icons/play.png");
         this.add(playIcon);
 
-        IconForButton nextIcon=new IconForButton("icons/next.png");
+        nextIcon=new IconForButton("icons/next.png");
         this.add(nextIcon);
         stopIcon=new IconForButton("icons/stop.png");
         this.add(stopIcon);
@@ -38,5 +39,13 @@ public class SouthPanel extends JPanel {
 
     public IconForButton getPlayIcon() {
         return playIcon;
+    }
+
+    public IconForButton getNextIcon() {
+        return nextIcon;
+    }
+
+    public IconForButton getPreviousIcon() {
+        return previousIcon;
     }
 }
