@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -11,6 +12,10 @@ public class LeftPanel extends JPanel {
     private JButton addToLibraryIcon= new JButton(new ImageIcon("icons/plus.jpg"));
     private ButtonForLeftPanel songs;
     private ButtonForLeftPanel albums;
+    private int y=435,i=0;
+    private ButtonForLeftPanel buttonForLeftPanel;
+    private ArrayList<ButtonForLeftPanel>playlists=new ArrayList<>();
+    private JButton addPlaylistIcon;
     public LeftPanel() {
         this.setBackground(Color.DARK_GRAY);
         this.setPreferredSize(new Dimension(200, 100));
@@ -59,6 +64,19 @@ public class LeftPanel extends JPanel {
         addToLibrary.setLocation(50,225);
         this.add(addToLibrary);
 
+        addPlaylistIcon= new JButton(new ImageIcon("icons/plus.jpg"));
+        addPlaylistIcon.setSize(30,30);
+        addPlaylistIcon.setLocation(5,315);
+        addPlaylistIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        this.setBackground(Color.DARK_GRAY);
+        addPlaylistIcon.setBorderPainted(false);
+        addPlaylistIcon.setFocusPainted(false);
+        addPlaylistIcon.setContentAreaFilled(false);
+        this.add(addPlaylistIcon);
+        TextLabel addToPlaylist=new TextLabel("add Playlist");
+        addToPlaylist.setLocation(50,315);
+        this.add(addToPlaylist);
+
         JLabel playlistIcon=new JLabel(new ImageIcon("icons/playlist.png"));
         playlistIcon.setLocation(7, 270);
         playlistIcon.setSize(25, 30);
@@ -69,7 +87,7 @@ public class LeftPanel extends JPanel {
         this.add(playlist);
 
         ButtonForLeftPanel favoriteSongs=new ButtonForLeftPanel("Favorites");
-        favoriteSongs.setLocation(30,315);
+        favoriteSongs.setLocation(30,405);
         favoriteSongs.setSize(100,30);
         this.add(favoriteSongs);
 
@@ -77,22 +95,15 @@ public class LeftPanel extends JPanel {
         recentlyPlayed.setLocation(30,360);
         recentlyPlayed.setSize(130,30);
         this.add(recentlyPlayed);
-
-        JButton addToPlaylistIcon= new JButton(new ImageIcon("icons/plus.jpg"));
-        addToPlaylistIcon.setSize(30,30);
-        addToPlaylistIcon.setLocation(5,405);
-        addToPlaylistIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        this.setBackground(Color.DARK_GRAY);
-        addToPlaylistIcon.setBorderPainted(false);
-        addToPlaylistIcon.setFocusPainted(false);
-        addToPlaylistIcon.setContentAreaFilled(false);
-        this.add(addToPlaylistIcon);
-        TextLabel addToPlaylist=new TextLabel("add to Playlist");
-        addToPlaylist.setLocation(50,405);
-        this.add(addToPlaylist);
-
     }
-
+    public void addLableOfplaylist(String name)
+    {
+        buttonForLeftPanel=new ButtonForLeftPanel(name);
+        buttonForLeftPanel.setLocation(50,y+i*20);
+        this.add(buttonForLeftPanel);
+        playlists.add(buttonForLeftPanel);
+        i++;
+    }
     public JButton getAddToLibraryIcon() {
         return addToLibraryIcon;
     }
@@ -103,5 +114,13 @@ public class LeftPanel extends JPanel {
 
     public ButtonForLeftPanel getSongs() {
         return songs;
+    }
+
+    public JButton getAddPlaylistIcon() {
+        return addPlaylistIcon;
+    }
+
+    public ArrayList<ButtonForLeftPanel> getPlaylists() {
+        return playlists;
     }
 }

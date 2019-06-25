@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class CenterPanel extends JPanel {
     JLabel jLabel=new JLabel();
     JButton jButton1;
+    TextField textField=new TextField();
     ArrayList<JButton>jButtonsForSong=new ArrayList<>();
     ArrayList<JButton>jButtonsForAlbum=new ArrayList<>();
     ArrayList<JButton>jButtonsSongForAlbum=new ArrayList<>();
@@ -16,10 +17,6 @@ public class CenterPanel extends JPanel {
 //        JLabel background=new JLabel(new ImageIcon("icons/binary.jpg"));
 //        this.add(background);
 
-    }
-    public void removeSongButtenForAlbum()
-    {
-        jButtonsForSong.remove(jButton1);
     }
     public void addSongButtonForAlbum(int i)
     {
@@ -32,6 +29,10 @@ public class CenterPanel extends JPanel {
     public void addButton(int i)
     {
         this.add(jButtonsForSong.get(i));
+    }
+    public void textfildForNameOfPlayList()
+    {
+        this.add(textField,FlowLayout.LEFT);
     }
     public void creatSongButtenForAlbume(Song song)
     {
