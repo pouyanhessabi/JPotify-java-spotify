@@ -4,15 +4,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 public class MusicPlayer {
+
     FileInputStream fileInputStream;
     private long pausePosition;
     private long total;
     Player player;
-    public synchronized void play(String name) throws FileNotFoundException {
+    public synchronized void play(String path) throws FileNotFoundException {
         new Thread(() -> {
             try {
+
                 try {
-                    fileInputStream = new FileInputStream(name);
+                    fileInputStream = new FileInputStream(path);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
