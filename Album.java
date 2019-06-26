@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Album {
+public class Album implements Serializable {
     private String name;
     private ArrayList<Song>songs=new ArrayList<>();
     public Album(String name) {

@@ -11,6 +11,7 @@ public class CenterPanel extends JPanel {
     ArrayList<JButton>jButtonsForAlbum=new ArrayList<>();
     ArrayList<JButton>jButtonsSongForAlbum=new ArrayList<>();
     public CenterPanel() {
+        textField.setPreferredSize(new Dimension(200,40));
         this.add(jLabel);
         this.setLayout(new FlowLayout());
 //        this.add(jButton,BorderLayout.CENTER);

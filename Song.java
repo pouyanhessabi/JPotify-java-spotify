@@ -6,13 +6,15 @@ import com.mpatric.mp3agic.UnsupportedTagException;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-public class Song {
+import java.io.Serializable;
+
+public class Song implements Serializable {
     private String path;
     private String name;
     private String AlbumName;
     private String artistName;
-    private Mp3File mp3file;
-    private  ID3v2 id3v2Tag;
+    private transient Mp3File mp3file;
+    private  transient ID3v2 id3v2Tag;
     private byte[] imageData;
     private String picType;
     public Song(String path,String name)

@@ -16,11 +16,11 @@ public class LeftPanel extends JPanel {
     private ButtonForLeftPanel buttonForLeftPanel;
     private ArrayList<ButtonForLeftPanel>playlists=new ArrayList<>();
     private JButton addPlaylistIcon;
+    ButtonForLeftPanel favoriteSongs;
     public LeftPanel() {
         this.setBackground(Color.DARK_GRAY);
         this.setPreferredSize(new Dimension(200, 100));
         this.setLayout(null);
-
 
         JLabel homeIcon = new JLabel(new ImageIcon("icons/home.png"));
         homeIcon.setLocation(5, 0);
@@ -86,20 +86,22 @@ public class LeftPanel extends JPanel {
         playlist.setLocation(50,270);
         this.add(playlist);
 
-        ButtonForLeftPanel favoriteSongs=new ButtonForLeftPanel("Favorites");
+        favoriteSongs=new ButtonForLeftPanel("Favorites");
         favoriteSongs.setLocation(30,405);
         favoriteSongs.setSize(100,30);
         this.add(favoriteSongs);
-
         ButtonForLeftPanel recentlyPlayed=new ButtonForLeftPanel("Recently Played");
         recentlyPlayed.setLocation(30,360);
         recentlyPlayed.setSize(130,30);
         this.add(recentlyPlayed);
+
+
+
     }
     public void addLableOfplaylist(String name)
     {
         buttonForLeftPanel=new ButtonForLeftPanel(name);
-        buttonForLeftPanel.setLocation(50,y+i*20);
+        buttonForLeftPanel.setLocation(50,y+i*30);
         this.add(buttonForLeftPanel);
         playlists.add(buttonForLeftPanel);
         i++;
