@@ -40,6 +40,7 @@ public class MainFrame extends JFrame {
         this.add(rightPanel, BorderLayout.EAST);
         this.getContentPane().add(centerPanel, BorderLayout.CENTER);
         this.setVisible(true);
+
         MyListener myListener = new MyListener();
         leftPanel.getAddToLibraryIcon().addActionListener(myListener);
         ActionListenerForSongsButten actionListenerForSongsButten = new ActionListenerForSongsButten(1);
@@ -121,11 +122,16 @@ public class MainFrame extends JFrame {
                 e.getWindow().dispose();
             }
         });
-        JScrollPane scrollPane=new JScrollPane();
+
+        JScrollPane scrollPane=new JScrollPane(leftPanel);
+        scrollPane.setPreferredSize(new Dimension(200,700));
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setViewportView(leftPanel);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.add(scrollPane,BorderLayout.WEST);
         this.pack();
+
+
+
     }
     private class MyListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {

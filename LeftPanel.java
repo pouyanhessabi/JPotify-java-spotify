@@ -19,7 +19,7 @@ public class LeftPanel extends JPanel {
     ButtonForLeftPanel favoriteSongs;
     public LeftPanel() {
         this.setBackground(Color.DARK_GRAY);
-        this.setPreferredSize(new Dimension(200, 100));
+        this.setPreferredSize(new Dimension(200, 700));
         this.setLayout(null);
 
         JLabel homeIcon = new JLabel(new ImageIcon("icons/home.png"));
