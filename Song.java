@@ -50,22 +50,6 @@ public class Song implements Serializable {
             imageData = id3v2Tag.getAlbumImage();
             if (imageData != null) {
                 picType = id3v2Tag.getAlbumImageMimeType().substring(6);
-//                FileOutputStream fileOutputStream = null;
-//                try {
-//                    fileOutputStream = new FileOutputStream("album-artwork." + picType);
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//                try {
-//                    fileOutputStream.write(imageData);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                try {
-//                    fileOutputStream.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
             }
         }
 
@@ -74,6 +58,8 @@ public class Song implements Serializable {
         if (mp3file.hasId3v2Tag()) {
             ID3v2 id3v2Tag = mp3file.getId3v2Tag();
             artistName = id3v2Tag.getAlbumArtist();
+            if(artistName==null)
+                artistName="NO ARTIST NAME";
         }
     }
     public void setAlbumName()
@@ -82,6 +68,7 @@ public class Song implements Serializable {
         {
             ID3v2 id3v2Tag = mp3file.getId3v2Tag();
             AlbumName=id3v2Tag.getAlbum();
+            AlbumName="NO ALBUM NAME";
         }
     }
 
