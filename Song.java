@@ -68,6 +68,7 @@ public class Song implements Serializable {
         {
             ID3v2 id3v2Tag = mp3file.getId3v2Tag();
             AlbumName=id3v2Tag.getAlbum();
+            if(AlbumName==null)
             AlbumName="NO ALBUM NAME";
         }
     }

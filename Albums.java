@@ -7,7 +7,14 @@ public class Albums implements Serializable {
     {
         albumArrayList.add(a);
     }
-
+    public void replace(Album album)
+    {
+        if(!album.equals(albumArrayList.get(0)))
+        {
+            albumArrayList.remove(album);
+            albumArrayList.add(0,album);
+        }
+    }
     public ArrayList<Album> getAlbumArrayList() {
         return albumArrayList;
     }

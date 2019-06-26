@@ -118,17 +118,40 @@ public class Main {
                 e.printStackTrace();
             }
         }
+        int favoriteIsAlive=0,sharedPlaylistIsAlive=0;
         if(albums1!=null)
         {
             for (int i = 0; i <albums1.getAlbumArrayList().size() ; i++) {
                 frame.playLists.setAlbum(albums1.getAlbumArrayList().get(i));
-                System.out.println("from file playList    "+frame.playLists.getAlbumArrayList().size());
-                frame.leftPanel.getPlaylists().clear();
+                if(albums1.getAlbumArrayList().get(i).getName().equals("Favorites"))
+                {
+                    frame.leftPanel.getFavoriteSongs().addActionListener(frame.actionListenerForPlayList);
+                    favoriteIsAlive=1;
+
+                }
+                else if(albums1.getAlbumArrayList().get(i).getName().equals("SharedPlaylist"))
+                {
+                    frame.leftPanel.getSharedPlaylist().addActionListener(frame.actionListenerForPlayList);
+                    sharedPlaylistIsAlive=1;
+                }
+                else{
+                    frame.leftPanel.getPlaylists().clear();
+                    frame.leftPanel.addLableOfplaylist(frame.playLists.getAlbumArrayList().get(i).getName());
+                    frame.leftPanel.getPlaylists().get(frame.leftPanel.getPlaylists().size() - 1).addActionListener(frame.actionListenerForPlayList);
+
+                }
                 frame.leftPanel.setVisible(false);
-                frame.leftPanel.addLableOfplaylist(frame.playLists.getAlbumArrayList().get(i).getName());
-                frame.leftPanel.getPlaylists().get(frame.leftPanel.getPlaylists().size() - 1).addActionListener(frame.actionListenerForPlayList);
                 frame.leftPanel.setVisible(true);
             }
+        }
+        if(favoriteIsAlive==0)
+        {
+            frame.creatFavorite();
+        }
+        if(sharedPlaylistIsAlive==0)
+        {
+
+            frame.creatSharedPlayList();
         }
 
     }

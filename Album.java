@@ -18,7 +18,16 @@ public class Album implements Serializable {
     {
         songs.remove(song);
     }
+    public void replace(Song song)
+    {
+        if(!song.equals(songs.get(0)))
+        {
+                songs.remove(song);
+                songs.add(0,song);
+        }
+    }
     public ArrayList<Song> getSongs() {
         return songs;
     }
+
 }
