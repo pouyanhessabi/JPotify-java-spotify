@@ -130,5 +130,7 @@ public class Main {
                 frame.leftPanel.setVisible(true);
             }
         }
+
+        System.out.println("salam");
     }
 }
