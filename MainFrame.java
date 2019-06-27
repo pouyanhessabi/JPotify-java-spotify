@@ -3,7 +3,6 @@ import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.ArrayList;
 
 public class MainFrame extends JFrame {
     MusicPlayer musicPlayer = new MusicPlayer();
@@ -11,26 +10,29 @@ public class MainFrame extends JFrame {
     public SouthPanel southPanel = new SouthPanel();
     LeftPanel leftPanel = new LeftPanel();
     JLabel jLabel;
-    private int counter, clickAlbums=0;
+    private int counter, clickAlbums = 0;
     Song song;
     JButton addSongToPlayList;
-    int i = 0, i6 = 0;
+    int i6 = 0;
     String pathSong;
     int counter1 = 0;
     String playlistName;
     Album library = new Album("library");
     Album favorite = new Album("Favorites");
     Album sharedPlaylist = new Album("SharedPlaylist");
-    Albums albumArrayList=new Albums();
-    Albums playLists=new Albums();
+    Albums albumArrayList = new Albums();
+    Albums playLists = new Albums();
+    private volatile String songInfo = null;
+    private volatile boolean clicked = false;
     ActionListenerForSongButtonInCenterPanel actionListenerForButtonInCenterPanel1 = new ActionListenerForSongButtonInCenterPanel(1);
     ActionListenerForSongButtonInCenterPanel actionListenerForButtonInCenterPanel2 = new ActionListenerForSongButtonInCenterPanel(2);
-    ActionListenerForAlbumButtonIncenterpanel actionListenerForAlbumButtonIncenterpanel = new ActionListenerForAlbumButtonIncenterpanel();
+    ActionListenerForAlbumButtonInCenterPanel actionListenerForAlbumButtonIncenterpanel = new ActionListenerForAlbumButtonInCenterPanel();
     ActionListenerForPlayList actionListenerForPlayList = new ActionListenerForPlayList();
     private CenterPanel centerPanel = new CenterPanel();
     ActionListenerForNextAndPrevious actionListenerForNextAndPrevious1;
     ActionListenerForNextAndPrevious actionListenerForNextAndPrevious2;
     Album recentlyAlbum;
+
     public MainFrame() {
         counter = 1;
         counter = 0;
@@ -44,22 +46,22 @@ public class MainFrame extends JFrame {
 
         MyListener myListener = new MyListener();
         leftPanel.getAddToLibraryIcon().addActionListener(myListener);
-        ActionListenerForSongsButten actionListenerForSongsButten = new ActionListenerForSongsButten(1);
-        leftPanel.getSongs().addActionListener(actionListenerForSongsButten);
+        ActionListenerForSongsButton actionListenerForSongsButton = new ActionListenerForSongsButton(1);
+        leftPanel.getSongs().addActionListener(actionListenerForSongsButton);
         southPanel.getPlayIcon().addActionListener(new ActionListenerForPlay());
-        southPanel.getStopIcon().addActionListener(new ActionListenerForStopButten());
+        southPanel.getStopIcon().addActionListener(new ActionListenerForStopButton());
         leftPanel.getAlbums().addActionListener(new ActionListenerForAlbumButton());
-        leftPanel.getAddPlaylistIcon().addActionListener(new ActionListenerForAddPlaylistButten());
+        leftPanel.getAddPlaylistIcon().addActionListener(new ActionListenerForAddPlaylistButton());
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                FileOutputStream fileOutputStream= null;
+                FileOutputStream fileOutputStream = null;
                 try {
                     fileOutputStream = new FileOutputStream("library.txt");
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
-                ObjectOutputStream objectOutputStream= null;
+                ObjectOutputStream objectOutputStream = null;
                 try {
                     objectOutputStream = new ObjectOutputStream(fileOutputStream);
                 } catch (IOException e1) {
@@ -75,13 +77,13 @@ public class MainFrame extends JFrame {
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-                FileOutputStream fileOutputStream1= null;
+                FileOutputStream fileOutputStream1 = null;
                 try {
                     fileOutputStream1 = new FileOutputStream("album.txt");
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
-                ObjectOutputStream objectOutputStream1= null;
+                ObjectOutputStream objectOutputStream1 = null;
                 try {
                     objectOutputStream1 = new ObjectOutputStream(fileOutputStream1);
                 } catch (IOException e1) {
@@ -97,13 +99,13 @@ public class MainFrame extends JFrame {
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-                FileOutputStream fileOutputStream2= null;
+                FileOutputStream fileOutputStream2 = null;
                 try {
                     fileOutputStream2 = new FileOutputStream("playlists.txt");
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
-                ObjectOutputStream objectOutputStream2= null;
+                ObjectOutputStream objectOutputStream2 = null;
                 try {
                     objectOutputStream2 = new ObjectOutputStream(fileOutputStream2);
                 } catch (IOException e1) {
@@ -123,23 +125,40 @@ public class MainFrame extends JFrame {
                 e.getWindow().dispose();
             }
         });
-        JScrollPane scrollPane=new JScrollPane(leftPanel);
-        scrollPane.setPreferredSize(new Dimension(200,700));
+        JScrollPane scrollPane = new JScrollPane(leftPanel);
+        scrollPane.setPreferredSize(new Dimension(200, 700));
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        this.add(scrollPane,BorderLayout.WEST);
+        this.add(scrollPane, BorderLayout.WEST);
         this.pack();
     }
-    public void creatFavorite()
-    {
+
+    public synchronized String getSongInfo() {
+        return songInfo;
+    }
+
+    public synchronized void setSongInfo(String songInfo) {
+        this.songInfo = songInfo;
+    }
+
+    public synchronized boolean isClicked() {
+        return clicked;
+    }
+
+    public synchronized void setClicked(boolean clicked) {
+        this.clicked = clicked;
+    }
+
+    public void createFavorite() {
         playLists.setAlbum(favorite);
         leftPanel.getFavoriteSongs().addActionListener(new ActionListenerForPlayList());
     }
-    public void creatSharedPlayList()
-    {
+
+    public void createSharedPlayList() {
         playLists.setAlbum(sharedPlaylist);
         leftPanel.getSharedPlaylist().addActionListener(new ActionListenerForPlayList());
     }
+
     private class MyListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
             JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
@@ -178,10 +197,11 @@ public class MainFrame extends JFrame {
 //            }
         }
     }
-    private class ActionListenerForSongsButten implements ActionListener {
+
+    private class ActionListenerForSongsButton implements ActionListener {
         int status;
 
-        public ActionListenerForSongsButten(int status) {
+        public ActionListenerForSongsButton(int status) {
             this.status = status;
         }
 
@@ -190,19 +210,17 @@ public class MainFrame extends JFrame {
             centerPanel.setVisible(false);
             centerPanel.jLabel.setText(" ");
             centerPanel.jButtonsForSong.clear();
-            if(pathSong!=null)
-            {
-                for (int j = 0; j <library.getSongs().size() ; j++) {
-                    if(library.getSongs().get(j).getPath().equals(pathSong))
-                    {
-                        System.out.println(library.getSongs().get(j).getPath()+"   "+pathSong);
+            if (pathSong != null) {
+                for (int j = 0; j < library.getSongs().size(); j++) {
+                    if (library.getSongs().get(j).getPath().equals(pathSong)) {
+                        System.out.println(library.getSongs().get(j).getPath() + "   " + pathSong);
                         library.replace(library.getSongs().get(j));
                         break;
                     }
                 }
             }
             for (int i1 = 0; i1 < library.getSongs().size(); i1++) {
-                centerPanel.creatButten(library.getSongs().get(i1));
+                centerPanel.createButton(library.getSongs().get(i1));
                 if (status == 1)
                     centerPanel.jButtonsForSong.get(i1).addActionListener(actionListenerForButtonInCenterPanel1);
                 else if (status == 2)
@@ -214,13 +232,14 @@ public class MainFrame extends JFrame {
             }
             centerPanel.setVisible(true);
             southPanel.getNextIcon().removeActionListener(actionListenerForNextAndPrevious1);
-            actionListenerForNextAndPrevious1=new ActionListenerForNextAndPrevious(1, "library",1);
+            actionListenerForNextAndPrevious1 = new ActionListenerForNextAndPrevious(1, "library", 1);
             southPanel.getNextIcon().addActionListener(actionListenerForNextAndPrevious1);
             southPanel.getPreviousIcon().removeActionListener(actionListenerForNextAndPrevious2);
-            actionListenerForNextAndPrevious2=new ActionListenerForNextAndPrevious(1, "library",-1);
+            actionListenerForNextAndPrevious2 = new ActionListenerForNextAndPrevious(1, "library", -1);
             southPanel.getPreviousIcon().addActionListener(actionListenerForNextAndPrevious2);
         }
     }
+
     private class ActionListenerForPlay implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -249,15 +268,14 @@ public class MainFrame extends JFrame {
             counter++;
         }
     }
+
     private class ActionListenerForAlbumButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(recentlyAlbum!=null)
-            {
-                for (int k = 0; k <albumArrayList.getAlbumArrayList().size() ; k++) {
-                    if(albumArrayList.getAlbumArrayList().get(k).equals(recentlyAlbum))
-                    {
-                        System.out.println(albumArrayList.getAlbumArrayList().get(k).getName()+"   "+recentlyAlbum.getName());
+            if (recentlyAlbum != null) {
+                for (int k = 0; k < albumArrayList.getAlbumArrayList().size(); k++) {
+                    if (albumArrayList.getAlbumArrayList().get(k).equals(recentlyAlbum)) {
+                        System.out.println(albumArrayList.getAlbumArrayList().get(k).getName() + "   " + recentlyAlbum.getName());
                         albumArrayList.replace(albumArrayList.getAlbumArrayList().get(k));
                         break;
                     }
@@ -267,8 +285,8 @@ public class MainFrame extends JFrame {
             centerPanel.setVisible(false);
             centerPanel.jButtonsForAlbum.clear();
             centerPanel.jLabel.setText(" ");
-            for (int i4=0; i4 < albumArrayList.getAlbumArrayList().size(); i4++) {
-                centerPanel.creatAlbumButten(albumArrayList.getAlbumArrayList().get(i4));
+            for (int i4 = 0; i4 < albumArrayList.getAlbumArrayList().size(); i4++) {
+                centerPanel.createAlbumButton(albumArrayList.getAlbumArrayList().get(i4));
                 centerPanel.jButtonsForAlbum.get(i4).addActionListener(actionListenerForAlbumButtonIncenterpanel);
             }
             for (int i5 = 0; i5 < albumArrayList.getAlbumArrayList().size(); i5++) {
@@ -277,7 +295,8 @@ public class MainFrame extends JFrame {
             centerPanel.setVisible(true);
         }
     }
-    private class ActionListenerForAlbumButtonIncenterpanel implements ActionListener {
+
+    private class ActionListenerForAlbumButtonInCenterPanel implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
 //            System.out.println(e.getActionCommand());
@@ -286,20 +305,20 @@ public class MainFrame extends JFrame {
             centerPanel.removeAll();
             centerPanel.setVisible(false);
             centerPanel.jLabel.setText(" ");
-            albumName=e.getActionCommand();
+            albumName = e.getActionCommand();
             southPanel.getNextIcon().removeActionListener(actionListenerForNextAndPrevious1);
-            actionListenerForNextAndPrevious1=new ActionListenerForNextAndPrevious(2, albumName,1);
+            actionListenerForNextAndPrevious1 = new ActionListenerForNextAndPrevious(2, albumName, 1);
             southPanel.getNextIcon().addActionListener(actionListenerForNextAndPrevious1);
             southPanel.getPreviousIcon().removeActionListener(actionListenerForNextAndPrevious2);
-            actionListenerForNextAndPrevious2=new ActionListenerForNextAndPrevious(2, albumName,-1);
+            actionListenerForNextAndPrevious2 = new ActionListenerForNextAndPrevious(2, albumName, -1);
             southPanel.getPreviousIcon().addActionListener(actionListenerForNextAndPrevious2);
             int j;
-            for ( j = 0; j < albumArrayList.getAlbumArrayList().size(); j++) {
+            for (j = 0; j < albumArrayList.getAlbumArrayList().size(); j++) {
                 if (albumArrayList.getAlbumArrayList().get(j).getName().equals(e.getActionCommand())) {
-                    recentlyAlbum=albumArrayList.getAlbumArrayList().get(j);
+                    recentlyAlbum = albumArrayList.getAlbumArrayList().get(j);
                     centerPanel.jButtonsSongForAlbum.clear();
                     for (i6 = 0; i6 < albumArrayList.getAlbumArrayList().get(j).getSongs().size(); i6++) {
-                        centerPanel.creatSongButtenForAlbume(albumArrayList.getAlbumArrayList().get(j).getSongs().get(i6));
+                        centerPanel.createSongButtonForAlbum(albumArrayList.getAlbumArrayList().get(j).getSongs().get(i6));
                         centerPanel.jButtonsSongForAlbum.get(i6).addActionListener(actionListenerForButtonInCenterPanel1);
                     }
                     for (int i2 = 0; i2 < albumArrayList.getAlbumArrayList().get(j).getSongs().size(); i2++) {
@@ -311,11 +330,14 @@ public class MainFrame extends JFrame {
             }
         }
     }
+
     private class ActionListenerForSongButtonInCenterPanel implements ActionListener {
         int status;
+
         public ActionListenerForSongButtonInCenterPanel(int status) {
             this.status = status;
         }
+
         @Override
         public synchronized void actionPerformed(ActionEvent e) {
             if (status == 1) {
@@ -327,6 +349,9 @@ public class MainFrame extends JFrame {
                 for (; j < library.getSongs().size(); j++) {
                     if (library.getSongs().get(j).getName().equals(e.getActionCommand())) {
                         System.out.println(e.getActionCommand() + "  " + library.getSongs().get(j).getName() + "  " + j + "   " + library.getSongs().size());
+                        setSongInfo(library.getSongs().get(j).getName() + "\n" + library.getSongs().get(j).getArtistName());
+                        setClicked(true);
+
                         pathSong = library.getSongs().get(j).getPath();
                         southPanel.removeSongNAme();
                         southPanel.addSongNameAndImage(library.getSongs().get(j));
@@ -359,7 +384,8 @@ public class MainFrame extends JFrame {
             }
         }
     }
-    private class ActionListenerForStopButten implements ActionListener {
+
+    private class ActionListenerForStopButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             southPanel.getPlayIcon().setIcon(new ImageIcon("icons/play.png"));
@@ -367,13 +393,14 @@ public class MainFrame extends JFrame {
             counter = 0;
         }
     }
-    private class ActionListenerForAddPlaylistButtenInCenter implements ActionListener {
+
+    private class ActionListenerForAddPlaylistButtonInCenter implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             String name = centerPanel.textField.getText();
             System.out.println(name);
             leftPanel.setVisible(false);
-            leftPanel.addLableOfplaylist(name);
+            leftPanel.addLabelOfPlaylist(name);
             leftPanel.getPlaylists().get(leftPanel.getPlaylists().size() - 1).addActionListener(actionListenerForPlayList);
             Album album = new Album(name);
             playLists.getAlbumArrayList().add(album);
@@ -384,12 +411,13 @@ public class MainFrame extends JFrame {
 
         }
     }
+
     private class ActionListenerForPlayList implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             centerPanel.removeAll();
             playlistName = e.getActionCommand();
-            System.out.println("playlistname  "+playlistName);
+            System.out.println("playlistname  " + playlistName);
             centerPanel.jButtonsForSong.clear();
             for (int j = 0; j < playLists.getAlbumArrayList().size(); j++) {
                 System.out.println("in for");
@@ -397,7 +425,7 @@ public class MainFrame extends JFrame {
                     System.out.println("in if");
                     int k = 0;
                     for (; k < playLists.getAlbumArrayList().get(j).getSongs().size(); k++) {
-                        centerPanel.creatButten(playLists.getAlbumArrayList().get(j).getSongs().get(k));
+                        centerPanel.createButton(playLists.getAlbumArrayList().get(j).getSongs().get(k));
                         centerPanel.jButtonsForSong.get(k).addActionListener(actionListenerForButtonInCenterPanel1);
                     }
                     for (int l = 0; l < k; l++) {
@@ -406,69 +434,71 @@ public class MainFrame extends JFrame {
                 }
             }
             southPanel.getNextIcon().removeActionListener(actionListenerForNextAndPrevious1);
-            actionListenerForNextAndPrevious1=new ActionListenerForNextAndPrevious(3, playlistName,1);
+            actionListenerForNextAndPrevious1 = new ActionListenerForNextAndPrevious(3, playlistName, 1);
             southPanel.getNextIcon().addActionListener(actionListenerForNextAndPrevious1);
             southPanel.getPreviousIcon().removeActionListener(actionListenerForNextAndPrevious2);
-            actionListenerForNextAndPrevious2=new ActionListenerForNextAndPrevious(3, playlistName,-1);
+            actionListenerForNextAndPrevious2 = new ActionListenerForNextAndPrevious(3, playlistName, -1);
             southPanel.getPreviousIcon().addActionListener(actionListenerForNextAndPrevious2);
             addSongToPlayList = new JButton("+");
-            JLabel lableplaylistName = new JLabel(e.getActionCommand());
-            centerPanel.add(lableplaylistName);
+            JLabel labelPlaylistName = new JLabel(e.getActionCommand());
+            centerPanel.add(labelPlaylistName);
             centerPanel.add(addSongToPlayList);
-            addSongToPlayList.addActionListener(new ActionListenerForSongsButten(2));
+            addSongToPlayList.addActionListener(new ActionListenerForSongsButton(2));
             centerPanel.setVisible(false);
             centerPanel.setVisible(true);
         }
     }
+
     private class ActionListenerForButtonInCenterPanelForAddTooLibrary implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
 
         }
     }
-    private class ActionListenerForAddPlaylistButten implements ActionListener {
+
+    private class ActionListenerForAddPlaylistButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             centerPanel.removeAll();
             centerPanel.setVisible(false);
             JButton addToPlayList = new JButton("add playlist");
-            addToPlayList.addActionListener(new ActionListenerForAddPlaylistButtenInCenter());
+            addToPlayList.addActionListener(new ActionListenerForAddPlaylistButtonInCenter());
             centerPanel.add(addToPlayList);
-            centerPanel.textfildForNameOfPlayList();
+            centerPanel.textFieldForNameOfPlayList();
             centerPanel.setVisible(true);
 
         }
     }
+
     private class ActionListenerForNextAndPrevious implements ActionListener {
         int status;
         String albumName;
         int previousOrNext;
-        public ActionListenerForNextAndPrevious(int status, String albumName,int previousOrNext) {
+
+        public ActionListenerForNextAndPrevious(int status, String albumName, int previousOrNext) {
             this.status = status;
             this.albumName = albumName;
-            this.previousOrNext=previousOrNext;
+            this.previousOrNext = previousOrNext;
         }
+
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println(previousOrNext);
             if (status == 1) {
-                int j = 0,size = 0;
-                if(previousOrNext==1) {
-                    j=0;
-                    size=library.getSongs().size()-1;
+                int j = 0, size = 0;
+                if (previousOrNext == 1) {
+                    j = 0;
+                    size = library.getSongs().size() - 1;
+                } else if (previousOrNext == -1) {
+                    j = 1;
+                    size = library.getSongs().size();
                 }
-                else if(previousOrNext==-1)
-                {
-                    j=1;
-                    size=library.getSongs().size();
-                }
-                for (; j <size  ; j++) {
-                    if (library.getSongs().get(j).getPath().equals(pathSong))
-                    {
+                for (; j < size; j++) {
+                    if (library.getSongs().get(j).getPath().equals(pathSong)) {
                         musicPlayer.stop();
                         pathSong = library.getSongs().get(j + previousOrNext).getPath();
                         southPanel.removeSongNAme();
-                        southPanel.addSongNameAndImage(library.getSongs().get(j+ previousOrNext));
+                        southPanel.addSongNameAndImage(library.getSongs().get(j + previousOrNext));
                         try {
                             musicPlayer.play(pathSong);
                         } catch (FileNotFoundException e1) {
@@ -480,24 +510,21 @@ public class MainFrame extends JFrame {
             } else if (status == 2) {
                 for (int j = 0; j < albumArrayList.getAlbumArrayList().size(); j++) {
                     if (albumArrayList.getAlbumArrayList().get(j).getName().equals(albumName)) {
-                        int i=0 ,size = 0;
-                        if(previousOrNext==1) {
-                            i=0;
-                            size=albumArrayList.getAlbumArrayList().get(j).getSongs().size() - 1;
+                        int i = 0, size = 0;
+                        if (previousOrNext == 1) {
+                            i = 0;
+                            size = albumArrayList.getAlbumArrayList().get(j).getSongs().size() - 1;
 
-                        }
-                        else if(previousOrNext==-1)
-                        {
-                            i=1;
-                            size=albumArrayList.getAlbumArrayList().get(j).getSongs().size();
+                        } else if (previousOrNext == -1) {
+                            i = 1;
+                            size = albumArrayList.getAlbumArrayList().get(j).getSongs().size();
                         }
                         for (; i < size; i++) {
-                            if (albumArrayList.getAlbumArrayList().get(j).getSongs().get(i).getPath().equals(pathSong))
-                            {
+                            if (albumArrayList.getAlbumArrayList().get(j).getSongs().get(i).getPath().equals(pathSong)) {
                                 musicPlayer.stop();
                                 southPanel.removeSongNAme();
-                                southPanel.addSongNameAndImage(albumArrayList.getAlbumArrayList().get(j).getSongs().get(i+previousOrNext));
-                                pathSong = albumArrayList.getAlbumArrayList().get(j).getSongs().get(i+previousOrNext).getPath();
+                                southPanel.addSongNameAndImage(albumArrayList.getAlbumArrayList().get(j).getSongs().get(i + previousOrNext));
+                                pathSong = albumArrayList.getAlbumArrayList().get(j).getSongs().get(i + previousOrNext).getPath();
 
                                 try {
                                     musicPlayer.play(pathSong);
@@ -511,28 +538,24 @@ public class MainFrame extends JFrame {
                         break;
                     }
                 }
-            }
-            else if (status == 3) {
+            } else if (status == 3) {
                 for (int j = 0; j < playLists.getAlbumArrayList().size(); j++) {
                     if (playLists.getAlbumArrayList().get(j).getName().equals(albumName)) {
-                        int i = 0,size = 0;
-                        if(previousOrNext==1) {
-                            i=0;
-                            size=playLists.getAlbumArrayList().get(j).getSongs().size() - 1;
-                        }
-                        else if(previousOrNext==-1)
-                        {
-                            i=1;
-                            size=playLists.getAlbumArrayList().get(j).getSongs().size() ;
+                        int i = 0, size = 0;
+                        if (previousOrNext == 1) {
+                            i = 0;
+                            size = playLists.getAlbumArrayList().get(j).getSongs().size() - 1;
+                        } else if (previousOrNext == -1) {
+                            i = 1;
+                            size = playLists.getAlbumArrayList().get(j).getSongs().size();
 
 
                         }
-                        for (; i <size ; i++) {
-                            if (playLists.getAlbumArrayList().get(j).getSongs().get(i).getPath().equals(pathSong))
-                            {
+                        for (; i < size; i++) {
+                            if (playLists.getAlbumArrayList().get(j).getSongs().get(i).getPath().equals(pathSong)) {
                                 musicPlayer.stop();
                                 southPanel.removeSongNAme();
-                                southPanel.addSongNameAndImage(playLists.getAlbumArrayList().get(j).getSongs().get(i+previousOrNext));
+                                southPanel.addSongNameAndImage(playLists.getAlbumArrayList().get(j).getSongs().get(i + previousOrNext));
                                 pathSong = playLists.getAlbumArrayList().get(j).getSongs().get(i + previousOrNext).getPath();
                                 try {
                                     musicPlayer.play(pathSong);
