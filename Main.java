@@ -19,14 +19,76 @@ public class Main {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        UserFrame userFrame = new UserFrame();
+        while (true) {
+            if (userFrame.isTmpCheck())
+                break;
+        }
+        MainFrame frame = new MainFrame();
+        frame.setUserName(userFrame.getText());
+        int userAlive=0;
+        UserNames userNamesFromFile = null;
+        String nameOfLibrary,nameOfPlaylists,nameOfAlbum;
+        nameOfLibrary=userFrame.getText()+"library.txt";
+        nameOfAlbum=userFrame.getText()+"album.txt";
+        nameOfPlaylists=userFrame.getText()+"playlists.txt";
+
+        File file0=new File("UeserNames.txt");
+        if(file0.exists())
+        {
+            ObjectInputStream objectInputStream =
+                    null;
+            try {
+                objectInputStream = new ObjectInputStream(new FileInputStream("UeserNames.txt"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                try {
+                    userNamesFromFile = (UserNames) objectInputStream.readObject();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                objectInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if(userNamesFromFile!=null)
+        {
+            System.out.println("size of   "+userNamesFromFile.getUserNameArraylist().size());
+            int i;
+            for (i = 0; i <userNamesFromFile.getUserNameArraylist().size() ; i++) {
+                frame.userNames.setUserNameArraylist(userNamesFromFile.getUserNameArraylist().get(i));
+                if(userNamesFromFile.getUserNameArraylist().get(i).equals(userFrame.getText()))
+                {
+                    userAlive=1;
+                }
+            }
+            if(userAlive==0)
+                frame.userNames.setUserNameArraylist(userFrame.getText());
+
+        }
+        else{
+            frame.userNames.setUserNameArraylist(userFrame.getText());
+        }
+        for (int i = 0; i <frame.userNames.getUserNameArraylist().size() ; i++) {
+            System.out.println(frame.userNames.getUserNameArraylist().get(i)+"       "+i);
+
+        }
         Album library = null;
-        File file=new File("library.txt");
+        File file=new File(nameOfLibrary);
         if(file.exists()&&(file.length()>122))
         {
             ObjectInputStream objectInputStream =
                     null;
             try {
-                objectInputStream = new ObjectInputStream(new FileInputStream("library.txt"));
+                objectInputStream = new ObjectInputStream(new FileInputStream(nameOfLibrary));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -46,25 +108,6 @@ public class Main {
                 e.printStackTrace();
             }
         }
-        //        boolean checkUsername;
-//        try {
-//            new FileInputStream("user.txt");
-//            checkUsername=true;
-//        } catch (FileNotFoundException e) {
-//            System.out.println(" no file and no user");
-//            checkUsername=false;
-//        }
-//        if (!checkUsername) {
-//
-//        }
-        UserFrame userFrame = new UserFrame();
-        while (true) {
-            if (userFrame.isTmpCheck())
-                break;
-        }
-        MainFrame frame = new MainFrame();
-        frame.setUserName(userFrame.getText());
-
         if(library!=null)
         {
             for (int i = 0; i <library.getSongs().size() ; i++) {
@@ -73,14 +116,14 @@ public class Main {
             }
         }
         Albums albums = null;
-        File file1=new File("album.txt");
+        File file1=new File(nameOfAlbum);
         System.out.println(file1.length());
         if(file1.exists()&&(file1.length()>122))
         {
             ObjectInputStream objectInputStream =
                     null;
             try {
-                objectInputStream = new ObjectInputStream(new FileInputStream("album.txt"));
+                objectInputStream = new ObjectInputStream(new FileInputStream(nameOfAlbum));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -108,14 +151,14 @@ public class Main {
             }
         }
         Albums albums1 = null;
-        File file2=new File("playlists.txt");
+        File file2=new File(nameOfPlaylists);
         System.out.println(file2.length());
         if(file2.exists()&&(file2.length()>122))
         {
             ObjectInputStream objectInputStream =
                     null;
             try {
-                objectInputStream = new ObjectInputStream(new FileInputStream("playlists.txt"));
+                objectInputStream = new ObjectInputStream(new FileInputStream(nameOfPlaylists));
             } catch (IOException e) {
                 e.printStackTrace();
             }

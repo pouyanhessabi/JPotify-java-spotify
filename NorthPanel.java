@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class NorthPanel extends JPanel {
+    JLabel name=new JLabel();
     JTextField searchArea=new JTextField();
     JButton searchButton=new JButton("Search");
     public NorthPanel() {
@@ -9,8 +10,12 @@ public class NorthPanel extends JPanel {
         this.setLayout(new FlowLayout());
         searchArea.setPreferredSize(new Dimension(150,30));
         searchButton.setPreferredSize(new Dimension(100,30));
-
         this.add(searchArea);
         this.add(searchButton);
+    }
+    public void addNameToNorthPanel(String s)
+    {
+        name.setText(s);
+        this.add(name,FlowLayout.LEFT);
     }
 }

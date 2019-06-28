@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class MainFrame extends JFrame {
     private String userName;
     private boolean usernameExist;
+    UserNames userNames=new UserNames();
     MusicPlayer musicPlayer = new MusicPlayer();
     private RightPanel rightPanel = new RightPanel();
     public SouthPanel southPanel = new SouthPanel();
@@ -61,7 +62,7 @@ public class MainFrame extends JFrame {
             public void windowClosing(WindowEvent e) {
                 FileOutputStream fileOutputStream= null;
                 try {
-                    fileOutputStream = new FileOutputStream("library.txt");
+                    fileOutputStream = new FileOutputStream(userName+"library.txt");
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
@@ -83,7 +84,7 @@ public class MainFrame extends JFrame {
                 }
                 FileOutputStream fileOutputStream1= null;
                 try {
-                    fileOutputStream1 = new FileOutputStream("album.txt");
+                    fileOutputStream1 = new FileOutputStream(userName+"album.txt");
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
@@ -105,7 +106,7 @@ public class MainFrame extends JFrame {
                 }
                 FileOutputStream fileOutputStream2= null;
                 try {
-                    fileOutputStream2 = new FileOutputStream("playlists.txt");
+                    fileOutputStream2 = new FileOutputStream(userName+"playlists.txt");
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
@@ -122,6 +123,28 @@ public class MainFrame extends JFrame {
                 }
                 try {
                     objectOutputStream2.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                FileOutputStream fileOutputStream3= null;
+                try {
+                    fileOutputStream3 = new FileOutputStream("UeserNames.txt");
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+                ObjectOutputStream objectOutputStream3= null;
+                try {
+                    objectOutputStream3 = new ObjectOutputStream(fileOutputStream3);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                try {
+                    objectOutputStream3.writeObject(userNames);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                try {
+                    objectOutputStream3.close();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -142,6 +165,11 @@ public class MainFrame extends JFrame {
     }
     public void setUserName(String userName) {
         this.userName = userName;
+        northPanel.addNameToNorthPanel(userName);
+    }
+    public void aadUserNameToNorthPanel()
+    {
+
     }
     public void setUsernameExist(boolean usernameExist) {
         this.usernameExist = usernameExist;
