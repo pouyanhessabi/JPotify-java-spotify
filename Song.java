@@ -2,18 +2,22 @@ import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import org.tritonus.share.sampled.file.TAudioFileFormat;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
-
+import java.nio.file.Files;
+import java.util.Map;
+import java.io.*;
 public class Song implements Serializable {
     private String path;
     private String name;
     private String AlbumName;
     private String artistName;
     private transient Mp3File mp3file;
+    private int timeOfSong;
     private  transient ID3v2 id3v2Tag;
     private byte[] imageData;
     private String picType;
@@ -25,6 +29,7 @@ public class Song implements Serializable {
         setArtistName();
         songPic();
         setAlbumName();
+        setSongTime();
 //        setName();
 //        print();
     }
@@ -43,6 +48,30 @@ public class Song implements Serializable {
             }
         }
     }
+    public void setSongTime()  {
+        File file=new File(path);
+        Long microseconds;
+        AudioFileFormat fileFormat = null;
+        try {
+            fileFormat = AudioSystem.getAudioFileFormat(file);
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (fileFormat instanceof TAudioFileFormat) {
+            Map<?, ?> properties = ((TAudioFileFormat) fileFormat).properties();
+            String key = "duration";
+            microseconds = (Long) properties.get(key);
+            timeOfSong=(int)(microseconds/1000000);
+        } else {
+            try {
+                throw new UnsupportedAudioFileException();
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void songPic()
     {
@@ -50,6 +79,13 @@ public class Song implements Serializable {
             imageData = id3v2Tag.getAlbumImage();
             if (imageData != null) {
                 picType = id3v2Tag.getAlbumImageMimeType().substring(6);
+            } else {
+                File fi = new File("icons/1.jpg");
+                try {
+                    imageData = Files.readAllBytes(fi.toPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -95,6 +131,10 @@ public class Song implements Serializable {
 
     public String getAlbumName() {
         return AlbumName;
+    }
+
+    public int getTimeOfSong() {
+        return timeOfSong;
     }
 
     public void print()

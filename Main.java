@@ -3,7 +3,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
 
 public class Main {
 
@@ -21,8 +20,9 @@ public class Main {
             e.printStackTrace();
         }
         Album library = null;
-        File file = new File("library.txt");
-        if (file.exists() && (file.length() > 122)) {
+        File file=new File("library.txt");
+        if(file.exists()&&(file.length()>122))
+        {
             ObjectInputStream objectInputStream =
                     null;
             try {
@@ -48,16 +48,18 @@ public class Main {
         }
 
         MainFrame frame = new MainFrame();
-        if (library != null) {
-            for (int i = 0; i < library.getSongs().size(); i++) {
+        if(library!=null)
+        {
+            for (int i = 0; i <library.getSongs().size() ; i++) {
                 frame.library.setSong(library.getSongs().get(i));
-                System.out.println("from file    " + frame.library.getSongs().size());
+                System.out.println("from file    "+frame.library.getSongs().size());
             }
         }
         Albums albums = null;
-        File file1 = new File("album.txt");
+        File file1=new File("album.txt");
         System.out.println(file1.length());
-        if (file1.exists() && (file1.length() > 122)) {
+        if(file1.exists()&&(file1.length()>122))
+        {
             ObjectInputStream objectInputStream =
                     null;
             try {
@@ -81,16 +83,18 @@ public class Main {
                 e.printStackTrace();
             }
         }
-        if (albums != null) {
-            for (int i = 0; i < albums.getAlbumArrayList().size(); i++) {
+        if(albums!=null)
+        {
+            for (int i = 0; i <albums.getAlbumArrayList().size() ; i++) {
                 frame.albumArrayList.setAlbum(albums.getAlbumArrayList().get(i));
-                System.out.println("from file    " + frame.albumArrayList.getAlbumArrayList().size());
+                System.out.println("from file    "+frame.albumArrayList.getAlbumArrayList().size());
             }
         }
         Albums albums1 = null;
-        File file2 = new File("playlists.txt");
+        File file2=new File("playlists.txt");
         System.out.println(file2.length());
-        if (file2.exists() && (file2.length() > 122)) {
+        if(file2.exists()&&(file2.length()>122))
+        {
             ObjectInputStream objectInputStream =
                     null;
             try {
@@ -114,20 +118,25 @@ public class Main {
                 e.printStackTrace();
             }
         }
-        int favoriteIsAlive = 0, sharedPlaylistIsAlive = 0;
-        if (albums1 != null) {
-            for (int i = 0; i < albums1.getAlbumArrayList().size(); i++) {
+        int favoriteIsAlive=0,sharedPlaylistIsAlive=0;
+        if(albums1!=null)
+        {
+            for (int i = 0; i <albums1.getAlbumArrayList().size() ; i++) {
                 frame.playLists.setAlbum(albums1.getAlbumArrayList().get(i));
-                if (albums1.getAlbumArrayList().get(i).getName().equals("Favorites")) {
+                if(albums1.getAlbumArrayList().get(i).getName().equals("Favorites"))
+                {
                     frame.leftPanel.getFavoriteSongs().addActionListener(frame.actionListenerForPlayList);
-                    favoriteIsAlive = 1;
+                    favoriteIsAlive=1;
 
-                } else if (albums1.getAlbumArrayList().get(i).getName().equals("SharedPlaylist")) {
+                }
+                else if(albums1.getAlbumArrayList().get(i).getName().equals("SharedPlaylist"))
+                {
                     frame.leftPanel.getSharedPlaylist().addActionListener(frame.actionListenerForPlayList);
-                    sharedPlaylistIsAlive = 1;
-                } else {
+                    sharedPlaylistIsAlive=1;
+                }
+                else{
                     frame.leftPanel.getPlaylists().clear();
-                    frame.leftPanel.addLabelOfPlaylist(frame.playLists.getAlbumArrayList().get(i).getName());
+                    frame.leftPanel.addLableOfplaylist(frame.playLists.getAlbumArrayList().get(i).getName());
                     frame.leftPanel.getPlaylists().get(frame.leftPanel.getPlaylists().size() - 1).addActionListener(frame.actionListenerForPlayList);
 
                 }
@@ -135,31 +144,14 @@ public class Main {
                 frame.leftPanel.setVisible(true);
             }
         }
-        if (favoriteIsAlive == 0) {
-            frame.createFavorite();
+        if(favoriteIsAlive==0)
+        {
+            frame.creatFavorite();
         }
-        if (sharedPlaylistIsAlive == 0) {
+        if(sharedPlaylistIsAlive==0)
+        {
 
-            frame.createSharedPlayList();
-        }
-        Server server = new Server();
-        RightPanel rightPanel = new RightPanel();
-        int k = 0;
-        //Scanner scanner=new Scanner(System.in);
-        ArrayList<String> infoOfEachClient = new ArrayList<>(50);
-        String clientName = "it's client name";
-        while (true) {
-            if (frame.isClicked() == true) {
-                try {
-                    new Client(clientName, frame.getSongInfo(), "127.0.0.1", 1111);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                frame.setClicked(false);
-                infoOfEachClient.add(server.getCurrentlyPlaying());
-                System.out.println(infoOfEachClient.get(k));
-                k++;
-            }
+            frame.creatSharedPlayList();
         }
 
     }

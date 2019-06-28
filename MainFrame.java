@@ -388,7 +388,8 @@ public class MainFrame extends JFrame {
     private class ActionListenerForAddPlaylistButtenInCenter implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String name = centerPanel.textField.getText();
+            String name = centerPanel.playlistName.getText();
+            centerPanel.playlistName.setText("");
             leftPanel.setVisible(false);
             leftPanel.addLableOfplaylist(name);
             leftPanel.getPlaylists().get(leftPanel.getPlaylists().size() - 1).addActionListener(actionListenerForPlayList);
@@ -428,12 +429,16 @@ public class MainFrame extends JFrame {
             addSongToPlayList = new JButton("+");
             centerPanel.add(addSongToPlayList);
             removeSongFromPlayList = new JButton("-");
-            removeSongFromPlayList.addActionListener(new ActionListenerForRemoveFromlaylistButton());
+            removeSongFromPlayList.addActionListener(new ActionListenerForRemoveFromPlaylistButton());
             JLabel lableplaylistName = new JLabel(e.getActionCommand());
-            removePLaylist=new JButton("remove");
-            renamePLaylist=new JButton("rename");
-            centerPanel.add(removePLaylist,FlowLayout.LEFT);
-            centerPanel.add(renamePLaylist,FlowLayout.LEFT);
+            if((!playlistName.equals(playLists.getAlbumArrayList().get(0).getName()))&&(!playlistName.equals(playLists.getAlbumArrayList().get(1).getName()))) {
+                removePLaylist = new JButton("remove");
+                renamePLaylist = new JButton("rename");
+                centerPanel.add(removePLaylist, FlowLayout.LEFT);
+                centerPanel.add(renamePLaylist, FlowLayout.LEFT);
+                removePLaylist.addActionListener(new ActionListenerForRemovePlaylistButtenInCenter());
+                renamePLaylist.addActionListener(new ActionListenerForRenamePlaylistButtenInCenter1());
+            }
             centerPanel.add(lableplaylistName,FlowLayout.LEFT);
             centerPanel.add(removeSongFromPlayList);
             addSongToPlayList.addActionListener(new ActionListenerForSongsButten(2));
@@ -441,7 +446,7 @@ public class MainFrame extends JFrame {
             centerPanel.setVisible(true);
         }
     }
-    private class ActionListenerForRemoveFromlaylistButton implements ActionListener {
+    private class ActionListenerForRemoveFromPlaylistButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             centerPanel.removeAll();
@@ -473,6 +478,85 @@ public class MainFrame extends JFrame {
             centerPanel.textfildForNameOfPlayList();
             centerPanel.setVisible(true);
 
+        }
+    }
+    private class ActionListenerForRemovePlaylistButtenInCenter implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            leftPanel.setVisible(false);
+            playLists.removeAlbum(playlistName);
+            for (int j = 0; j <leftPanel.getPlaylists().size() ; j++) {
+                leftPanel.remove(leftPanel.getPlaylists().get(j));
+            }
+            leftPanel.clearPlaylist();
+            for (int j = 2; j <playLists.getAlbumArrayList().size() ; j++) {
+                leftPanel.addLableOfplaylist(playLists.getAlbumArrayList().get(j).getName());
+            }
+            for (int i = 0; i <leftPanel.getPlaylists().size() ; i++) {
+                leftPanel.getPlaylists().get(i).addActionListener(actionListenerForPlayList);
+            }
+            leftPanel.setVisible(true);
+            centerPanel.removeAll();
+            centerPanel.setVisible(false);
+            centerPanel.setVisible(true);
+
+        }
+    }
+    private class ActionListenerForRenamePlaylistButtenInCenter1 implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            centerPanel.removeAll();
+            JLabel jLabel=new JLabel("enter yor new name");
+            centerPanel.add(jLabel,FlowLayout.LEFT);
+            centerPanel.textfildForNewNameOfPlayList();
+//            JTextField newNameField=new JTextField();
+//            newNameField.setPreferredSize(new Dimension(200,40));
+//            centerPanel.add(newNameField);
+            JButton rename=new JButton("rename playlist");
+            centerPanel.add(rename);
+            rename.addActionListener(new ActionListenerForRenamePlaylistButtenInCenter2());
+            centerPanel.setVisible(false);
+            centerPanel.setVisible(true);
+
+        }
+    }
+    private class ActionListenerForRenamePlaylistButtenInCenter2 implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String name = centerPanel.playlistNewName.getText();
+            centerPanel.playlistNewName.setText("");
+            leftPanel.setVisible(false);
+            for ( int i1 = 0; i1 <playLists.getAlbumArrayList().size() ; i1++) {
+                if(playLists.getAlbumArrayList().get(i1).getName().equals(playlistName))
+                {
+                    playLists.getAlbumArrayList().get(i1).setNewName(name);
+                    break;
+                }
+            }
+            for (int j = 0; j <leftPanel.getPlaylists().size() ; j++) {
+                leftPanel.remove(leftPanel.getPlaylists().get(j));
+            }
+            System.out.println(leftPanel.getPlaylists().size());
+            leftPanel.clearPlaylist();
+            System.out.println(playLists.getAlbumArrayList().size());
+            for (int j = 2; j <playLists.getAlbumArrayList().size() ; j++) {
+                    leftPanel.addLableOfplaylist(playLists.getAlbumArrayList().get(j).getName());
+            }
+            for (int i = 0; i <leftPanel.getPlaylists().size() ; i++) {
+                leftPanel.getPlaylists().get(i).addActionListener(actionListenerForPlayList);
+            }
+            centerPanel.removeAll();
+            centerPanel.setVisible(false);
+            centerPanel.setVisible(true);
+            leftPanel.setVisible(true);
+//            leftPanel.addLableOfplaylist(name);
+//            leftPanel.getPlaylists().get(leftPanel.getPlaylists().size() - 1).addActionListener(actionListenerForPlayList);
+//            Album album = new Album(name);
+//            playLists.getAlbumArrayList().add(album);
+//            leftPanel.setVisible(true);
+//            centerPanel.removeAll();
+//            centerPanel.setVisible(false);
+//            centerPanel.setVisible(true);
         }
     }
     private class ActionListenerForNextAndPrevious implements ActionListener {
