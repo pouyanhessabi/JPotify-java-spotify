@@ -1,14 +1,17 @@
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 public class MusicPlayer {
 
     FileInputStream fileInputStream;
     private long pausePosition;
     private long total;
     Player player;
+
     public synchronized void play(String path) throws FileNotFoundException {
         new Thread(() -> {
             try {
@@ -22,7 +25,7 @@ public class MusicPlayer {
                 try {
                     player = new Player(fileInputStream);
                     try {
-                        total=fileInputStream.available();
+                        total = fileInputStream.available();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -36,21 +39,22 @@ public class MusicPlayer {
         }).start();
 
     }
-    public void pause()
-    {
+
+    public void pause() {
         try {
-            pausePosition=fileInputStream.available();
+            pausePosition = fileInputStream.available();
         } catch (IOException e) {
             e.printStackTrace();
         }
         player.close();
     }
-    public void stop()
-    {
+
+    public void stop() {
         player.close();
     }
+
     public void resume(String name) throws FileNotFoundException {
-        new Thread(){
+        new Thread() {
             public void run() {
                 try {
                     try {
@@ -65,7 +69,7 @@ public class MusicPlayer {
                         e.printStackTrace();
                     }
                     try {
-                        fileInputStream.skip(total-pausePosition);
+                        fileInputStream.skip(total - pausePosition);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -74,6 +78,6 @@ public class MusicPlayer {
                     e.printStackTrace();
                 }
             }
-        } .start();
+        }.start();
     }
 }
