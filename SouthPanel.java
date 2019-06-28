@@ -11,33 +11,54 @@ public class SouthPanel extends JPanel {
     private IconForButton nextIcon;
     private IconForButton previousIcon;
     private static MyJSlider volumeIcon;
-    int songNameIsAlive=0;
+    private int songNameIsAlive=0;
+    private int movingbarAlive=0;
     private Label songName,songArtist;
+    MyJSlider movingBarIcon;
     JButton jButton;
     public SouthPanel() {
         this.setBackground(Color.black);
         this.setPreferredSize(new Dimension(500,100));
-        this.setLayout(new FlowLayout(FlowLayout.CENTER));
+        this.setLayout(new FlowLayout());
         previousIcon=new IconForButton("icons/previous.png");
         this.add(previousIcon);
-
         playIcon=new IconForButton("icons/play.png");
         this.add(playIcon);
-
         nextIcon=new IconForButton("icons/next.png");
         this.add(nextIcon);
         stopIcon=new IconForButton("icons/stop.png");
         this.add(stopIcon);
-
         volumeIcon=new MyJSlider(1,100,50);
         volumeIcon.setPreferredSize(new Dimension(80,20));
         VolumeListener volumeListener=new VolumeListener();
         volumeIcon.addMouseListener(volumeListener);
         this.add(volumeIcon);
+    }
+    public void addMovingBar(int size) {
 
-        MyJSlider movingBarIcon=new MyJSlider(1,100,50);
-        movingBarIcon.setPreferredSize(new Dimension(900,20));
+        movingBarIcon = new MyJSlider(1, size, 1);
+        movingBarIcon.setPreferredSize(new Dimension(700, 20));
         this.add(movingBarIcon);
+            movingbarAlive = 1;
+    }
+    public void moveMovingBar(int size)
+    {
+//        int i=0;
+//        while (i <= size) {
+//            movingBarIcon.setValue(i);
+//            i++;
+//            try {
+//                Thread.sleep(10);
+//            } catch (Exception e) {
+//            }
+//        }
+    }
+    public void removeMovingBar()
+    {
+        if(movingbarAlive==1)
+        {
+            this.remove(movingBarIcon);
+        }
     }
     public void removeSongNAme()
     {
