@@ -18,6 +18,7 @@ public class LeftPanel extends JPanel {
     private JButton addPlaylistIcon;
     private ButtonForLeftPanel favoriteSongs;
     private ButtonForLeftPanel SharedPlaylist;
+    private ButtonForLeftPanel home;
     public LeftPanel() {
         this.setBackground(Color.DARK_GRAY);
         this.setPreferredSize(new Dimension(200, 700));
@@ -28,7 +29,7 @@ public class LeftPanel extends JPanel {
         homeIcon.setSize(25, 30);
         this.add(homeIcon);
 
-        ButtonForLeftPanel home=new ButtonForLeftPanel("Home");
+        home=new ButtonForLeftPanel("Home");
         home.setLocation(30, 0);
         this.add(home);
 
@@ -88,11 +89,11 @@ public class LeftPanel extends JPanel {
         this.add(playlist);
 
         favoriteSongs=new ButtonForLeftPanel("Favorites");
-        favoriteSongs.setLocation(30,405);
+        favoriteSongs.setLocation(28,405);
         favoriteSongs.setSize(100,30);
         this.add(favoriteSongs);
         SharedPlaylist=new ButtonForLeftPanel("SharedPlaylist");
-        SharedPlaylist.setLocation(30,360);
+        SharedPlaylist.setLocation(26,360);
         SharedPlaylist.setSize(130,30);
         this.add(SharedPlaylist);
 
@@ -120,7 +121,7 @@ public class LeftPanel extends JPanel {
     public void addLableOfplaylist(String name)
     {
         buttonForLeftPanel=new ButtonForLeftPanel(name);
-        buttonForLeftPanel.setLocation(50,y+i*30);
+        buttonForLeftPanel.setLocation(35,y+i*50);
         this.add(buttonForLeftPanel);
         playlists.add(buttonForLeftPanel);
         i++;
@@ -151,5 +152,8 @@ public class LeftPanel extends JPanel {
 
     public ButtonForLeftPanel getSharedPlaylist() {
         return SharedPlaylist;
+    }
+    public ButtonForLeftPanel getHome() {
+        return home;
     }
 }

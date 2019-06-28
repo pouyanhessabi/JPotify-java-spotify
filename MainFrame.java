@@ -2,14 +2,18 @@ import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 
 public class MainFrame extends JFrame {
+    private String userName;
+    private boolean usernameExist;
     MusicPlayer musicPlayer = new MusicPlayer();
     private RightPanel rightPanel = new RightPanel();
     public SouthPanel southPanel = new SouthPanel();
     LeftPanel leftPanel = new LeftPanel();
+    private NorthPanel northPanel=new NorthPanel();
     JLabel jLabel;
     private int counter, clickAlbums=0;
     Song song;
@@ -40,8 +44,9 @@ public class MainFrame extends JFrame {
         this.add(southPanel, BorderLayout.PAGE_END);
         this.add(rightPanel, BorderLayout.EAST);
         this.getContentPane().add(centerPanel, BorderLayout.CENTER);
+        this.add(northPanel,BorderLayout.NORTH);
         this.setVisible(true);
-
+        northPanel.searchButton.addActionListener(new ActionListenerForSearch());
         MyListener myListener = new MyListener();
         leftPanel.getAddToLibraryIcon().addActionListener(myListener);
         ActionListenerForSongsButten actionListenerForSongsButten = new ActionListenerForSongsButten(1);
@@ -50,6 +55,7 @@ public class MainFrame extends JFrame {
         southPanel.getStopIcon().addActionListener(new ActionListenerForStopButten());
         leftPanel.getAlbums().addActionListener(new ActionListenerForAlbumButton());
         leftPanel.getAddPlaylistIcon().addActionListener(new ActionListenerForAddPlaylistButten());
+        leftPanel.getHome().addActionListener(new ActionListenerForHome());
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -129,6 +135,16 @@ public class MainFrame extends JFrame {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.add(scrollPane,BorderLayout.WEST);
         this.pack();
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    public void setUsernameExist(boolean usernameExist) {
+        this.usernameExist = usernameExist;
     }
     public void creatFavorite() {
         playLists.setAlbum(favorite);
@@ -328,7 +344,7 @@ public class MainFrame extends JFrame {
                         pathSong = library.getSongs().get(j).getPath();
                         movingBarSize=library.getSongs().get(j).getTimeOfSong();
                         southPanel.removeMovingBar();
-                        southPanel.addMovingBar(movingBarSize);
+                        //southPanel.addMovingBar(movingBarSize);
                         southPanel.removeSongNAme();
                         southPanel.addSongNameAndImage(library.getSongs().get(j));
                         southPanel.getPlayIcon().setIcon(new ImageIcon("icons/pause.png"));
@@ -668,4 +684,49 @@ public class MainFrame extends JFrame {
             }
         }
     }
+    private class ActionListenerForHome implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            centerPanel.removeAll();
+            centerPanel.setVisible(false);
+            centerPanel.add(new JLabel(new ImageIcon("icons/hd.png")));
+            centerPanel.setVisible(true);
+        }
+    }
+    private class ActionListenerForSearch implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String searchText=northPanel.searchArea.getText();
+            String searchText1=searchText+".mp3";
+            int isAlive=0;
+            centerPanel.removeAll();
+            centerPanel.setVisible(false);
+            centerPanel.jButtonsForSong.clear();
+            int j=0;
+            for (int i = 0; i <library.getSongs().size() ; i++) {
+                System.out.println(searchText+"   "+library.getSongs().get(i).getAlbumName());
+                if((searchText1.equals(library.getSongs().get(i).getName()))||(searchText.equals(library.getSongs().get(i).getArtistName()))||(searchText.equals(library.getSongs().get(i).getAlbumName())))
+                {
+                    centerPanel.creatButten(library.getSongs().get(i));
+                    centerPanel.addButton(j);
+                    isAlive=1;
+                    j++;
+                }
+            }
+            for (int i = 0; i <j ; i++) {
+                centerPanel.jButtonsForSong.get(i).addActionListener(new ActionListenerForSongButtonInCenterPanel(1));
+            }
+            if(isAlive==0)
+            {
+                JLabel jLabel=new JLabel(" No result");
+                centerPanel.add(jLabel);
+            }
+            northPanel.searchArea.setText("");
+            centerPanel.setVisible(true);
+
+        }
+    }
+
 }

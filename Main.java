@@ -46,8 +46,25 @@ public class Main {
                 e.printStackTrace();
             }
         }
-
+        //        boolean checkUsername;
+//        try {
+//            new FileInputStream("user.txt");
+//            checkUsername=true;
+//        } catch (FileNotFoundException e) {
+//            System.out.println(" no file and no user");
+//            checkUsername=false;
+//        }
+//        if (!checkUsername) {
+//
+//        }
+        UserFrame userFrame = new UserFrame();
+        while (true) {
+            if (userFrame.isTmpCheck())
+                break;
+        }
         MainFrame frame = new MainFrame();
+        frame.setUserName(userFrame.getText());
+
         if(library!=null)
         {
             for (int i = 0; i <library.getSongs().size() ; i++) {
