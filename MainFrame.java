@@ -57,6 +57,7 @@ public class MainFrame extends JFrame {
         leftPanel.getAlbums().addActionListener(new ActionListenerForAlbumButton());
         leftPanel.getAddPlaylistIcon().addActionListener(new ActionListenerForAddPlaylistButten());
         leftPanel.getHome().addActionListener(new ActionListenerForHome());
+        southPanel.addTofavorite.addActionListener(new ActionListenerForFavoriteButten());
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -754,6 +755,25 @@ public class MainFrame extends JFrame {
             northPanel.searchArea.setText("");
             centerPanel.setVisible(true);
 
+        }
+    }
+    private class ActionListenerForFavoriteButten implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            for (int i = 0; i <playLists.getAlbumArrayList().size() ; i++) {
+                if(playLists.getAlbumArrayList().get(i).getName().equals("Favorites"))
+                {
+                    for (int j = 0; j <library.getSongs().size() ; j++) {
+                        if(library.getSongs().get(i).getPath().equals(pathSong))
+                        {
+                            playLists.getAlbumArrayList().get(i).setSong(library.getSongs().get(i));
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
         }
     }
 

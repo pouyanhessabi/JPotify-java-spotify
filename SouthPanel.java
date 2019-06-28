@@ -16,10 +16,12 @@ public class SouthPanel extends JPanel {
     private Label songName,songArtist;
     MyJSlider movingBarIcon;
     JButton jButton;
+    JButton addTofavorite=new JButton("+ favorite");
     public SouthPanel() {
         this.setBackground(Color.black);
         this.setPreferredSize(new Dimension(500,100));
         this.setLayout(new FlowLayout());
+        this.add(addTofavorite);
         previousIcon=new IconForButton("icons/previous.png");
         this.add(previousIcon);
         playIcon=new IconForButton("icons/play.png");
