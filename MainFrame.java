@@ -36,6 +36,9 @@ public class MainFrame extends JFrame {
     ActionListenerForNextAndPrevious actionListenerForNextAndPrevious1;
     ActionListenerForNextAndPrevious actionListenerForNextAndPrevious2;
     Album recentlyAlbum;
+
+    private volatile String songInfo = null;
+    private volatile boolean clicked = false;
     public MainFrame() {
         counter = 1;
         counter = 0;
@@ -43,7 +46,7 @@ public class MainFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1300, 700);
         this.add(southPanel, BorderLayout.PAGE_END);
-        this.add(rightPanel, BorderLayout.EAST);
+//        this.add(rightPanel, BorderLayout.EAST);
         this.getContentPane().add(centerPanel, BorderLayout.CENTER);
         this.add(northPanel,BorderLayout.NORTH);
         this.setVisible(true);
@@ -58,6 +61,7 @@ public class MainFrame extends JFrame {
         leftPanel.getAddPlaylistIcon().addActionListener(new ActionListenerForAddPlaylistButten());
         leftPanel.getHome().addActionListener(new ActionListenerForHome());
         southPanel.addTofavorite.addActionListener(new ActionListenerForFavoriteButten());
+        rightPanel.getRefreshButton().addActionListener(new ActionListenerForRefreshingRight());
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -153,11 +157,17 @@ public class MainFrame extends JFrame {
                 e.getWindow().dispose();
             }
         });
-        JScrollPane scrollPane=new JScrollPane(leftPanel);
-        scrollPane.setPreferredSize(new Dimension(200,700));
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        this.add(scrollPane,BorderLayout.WEST);
+        JScrollPane leftScrollPane=new JScrollPane(leftPanel);
+        leftScrollPane.setPreferredSize(new Dimension(200,700));
+        leftScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        leftScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        this.add(leftScrollPane,BorderLayout.WEST);
+
+        JScrollPane rightScrollPane = new JScrollPane(rightPanel);
+        rightScrollPane.setPreferredSize(new Dimension(200, 700));
+        rightScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        rightScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        this.add(rightScrollPane, BorderLayout.EAST);
         this.pack();
     }
 
@@ -168,12 +178,23 @@ public class MainFrame extends JFrame {
         this.userName = userName;
         northPanel.addNameToNorthPanel(userName);
     }
-    public void aadUserNameToNorthPanel()
-    {
-
-    }
     public void setUsernameExist(boolean usernameExist) {
         this.usernameExist = usernameExist;
+    }
+    public synchronized String getSongInfo() {
+        return songInfo;
+    }
+
+    public synchronized void setSongInfo(String songInfo) {
+        this.songInfo = songInfo;
+    }
+
+    public synchronized boolean isClicked() {
+        return clicked;
+    }
+
+    public synchronized void setClicked(boolean clicked) {
+        this.clicked = clicked;
     }
     public void creatFavorite() {
         playLists.setAlbum(favorite);
@@ -279,6 +300,7 @@ public class MainFrame extends JFrame {
                 southPanel.getPlayIcon().setIcon(new ImageIcon("icons/pause.png"));
                 try {
                     musicPlayer.resume(pathSong);
+                    southPanel.resumeMovingBar();
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
@@ -287,6 +309,7 @@ public class MainFrame extends JFrame {
 //
             else {
                 southPanel.getPlayIcon().setIcon(new ImageIcon("icons/play.png"));
+                southPanel.pauseMovingBar();
                 musicPlayer.pause();
             }
             counter++;
@@ -373,7 +396,7 @@ public class MainFrame extends JFrame {
                         pathSong = library.getSongs().get(j).getPath();
                         movingBarSize=library.getSongs().get(j).getTimeOfSong();
                         southPanel.removeMovingBar();
-                        //southPanel.addMovingBar(movingBarSize);
+                        southPanel.addMovingBar(movingBarSize);
                         southPanel.removeSongNAme();
                         southPanel.addSongNameAndImage(library.getSongs().get(j));
                         southPanel.getPlayIcon().setIcon(new ImageIcon("icons/pause.png"));
@@ -386,7 +409,11 @@ public class MainFrame extends JFrame {
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
-//                southPanel.moveMovingBar(movingBarSize);
+                SwingUtilities.invokeLater( new Runnable() {
+                    public void run() {
+                        southPanel.moveMovingBar(movingBarSize);
+                    }
+                });
                 counter1 = 1;
             } else if (status == 2) {
                 for (int k = 0; k < playLists.getAlbumArrayList().size(); k++) {
@@ -427,6 +454,7 @@ public class MainFrame extends JFrame {
         public void actionPerformed(ActionEvent e) {
             southPanel.getPlayIcon().setIcon(new ImageIcon("icons/play.png"));
             musicPlayer.stop();
+            southPanel.StopMovingBar();
             counter = 0;
         }
     }
@@ -632,13 +660,22 @@ public class MainFrame extends JFrame {
                     {
                         musicPlayer.stop();
                         pathSong = library.getSongs().get(j + previousOrNext).getPath();
+                        movingBarSize=library.getSongs().get(j+previousOrNext).getTimeOfSong();
+                        southPanel.removeMovingBar();
+                        southPanel.addMovingBar(movingBarSize);
                         southPanel.removeSongNAme();
                         southPanel.addSongNameAndImage(library.getSongs().get(j+ previousOrNext));
                         try {
+
                             musicPlayer.play(pathSong);
                         } catch (FileNotFoundException e1) {
                             e1.printStackTrace();
                         }
+                        SwingUtilities.invokeLater( new Runnable() {
+                            public void run() {
+                                southPanel.moveMovingBar(movingBarSize);
+                            }
+                        });
                         break;
                     }
                 }
@@ -661,6 +698,9 @@ public class MainFrame extends JFrame {
                             {
                                 musicPlayer.stop();
                                 southPanel.removeSongNAme();
+                                movingBarSize=albumArrayList.getAlbumArrayList().get(j).getSongs().get(i+previousOrNext).getTimeOfSong();
+                                southPanel.removeMovingBar();
+                                southPanel.addMovingBar(movingBarSize);
                                 southPanel.addSongNameAndImage(albumArrayList.getAlbumArrayList().get(j).getSongs().get(i+previousOrNext));
                                 pathSong = albumArrayList.getAlbumArrayList().get(j).getSongs().get(i+previousOrNext).getPath();
 
@@ -669,6 +709,11 @@ public class MainFrame extends JFrame {
                                 } catch (FileNotFoundException e1) {
                                     e1.printStackTrace();
                                 }
+                                SwingUtilities.invokeLater( new Runnable() {
+                                    public void run() {
+                                        southPanel.moveMovingBar(movingBarSize);
+                                    }
+                                });
                                 break;
                             }
 
@@ -697,13 +742,22 @@ public class MainFrame extends JFrame {
                             {
                                 musicPlayer.stop();
                                 southPanel.removeSongNAme();
+                                movingBarSize=playLists.getAlbumArrayList().get(j).getSongs().get(i+previousOrNext).getTimeOfSong();
+                                southPanel.removeMovingBar();
+                                southPanel.addMovingBar(movingBarSize);
                                 southPanel.addSongNameAndImage(playLists.getAlbumArrayList().get(j).getSongs().get(i+previousOrNext));
                                 pathSong = playLists.getAlbumArrayList().get(j).getSongs().get(i + previousOrNext).getPath();
                                 try {
+
                                     musicPlayer.play(pathSong);
                                 } catch (FileNotFoundException e1) {
                                     e1.printStackTrace();
                                 }
+                                SwingUtilities.invokeLater( new Runnable() {
+                                    public void run() {
+                                        southPanel.moveMovingBar(movingBarSize);
+                                    }
+                                });
                                 break;
                             }
 
@@ -774,6 +828,23 @@ public class MainFrame extends JFrame {
                     break;
                 }
             }
+        }
+    }
+    private class ActionListenerForRefreshingRight implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            rightPanel.removeAll();
+            rightPanel.setVisible(false);
+            rightPanel.add(rightPanel.getRefreshButton());
+            JLabel []labels=new JLabel[50];
+            for (int i = 0; i <Friend.getAllData().size() ; i++) {
+                labels[i]=new JLabel(Friend.getAllData().get(i));
+                labels[i].setForeground(Color.WHITE);
+                labels[i].setBackground(Color.BLACK);
+                rightPanel.add(labels[i]);
+            }
+            rightPanel.setVisible(true);
         }
     }
 

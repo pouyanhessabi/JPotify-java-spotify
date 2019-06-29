@@ -213,6 +213,19 @@ public class Main {
 
             frame.creatSharedPlayList();
         }
+        String myUsername=frame.getUserName();
+        Friend friend= new Friend(myUsername,"127.0.0.1",5000,"127.0.0.1",4000);
+        while (true) {
+            if (frame.isClicked() == true ){
+                try {
+                    friend.sendData(frame.getSongInfo());
+                    frame.setClicked(false);
+                } catch (IOException e) {
+//                    e.printStackTrace();
+                }
+            }
+
+        }
 
     }
 }

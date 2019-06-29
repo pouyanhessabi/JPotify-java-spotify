@@ -13,9 +13,11 @@ public class SouthPanel extends JPanel {
     private static MyJSlider volumeIcon;
     private int songNameIsAlive=0;
     private int movingbarAlive=0;
+    Timer timer;
     private Label songName,songArtist;
     MyJSlider movingBarIcon;
     JButton jButton;
+    int counter2,counter,movingBarsize,firstTime=0;
     JButton addTofavorite=new JButton("+ favorite");
     public SouthPanel() {
         this.setBackground(Color.black);
@@ -36,6 +38,11 @@ public class SouthPanel extends JPanel {
         volumeIcon.addMouseListener(volumeListener);
         this.add(volumeIcon);
     }
+    public void StopMovingBar()
+    {
+        timer.stop();
+        movingBarIcon.setValue(0);
+    }
     public void addMovingBar(int size) {
 
         movingBarIcon = new MyJSlider(1, size, 1);
@@ -43,22 +50,52 @@ public class SouthPanel extends JPanel {
         this.add(movingBarIcon);
             movingbarAlive = 1;
     }
+    public void resumeMovingBar()
+    {
+        ActionListener listener = new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                counter2++;
+                movingBarIcon.setValue(counter2);
+                System.out.println(counter2);
+                if (counter2>movingBarsize) {
+                    timer.stop();
+                }
+            }
+        };
+        timer = new Timer(1000, listener);
+        timer.start();
+    }
+
     public void moveMovingBar(int size)
     {
-//        int i=0;
-//        while (i <= size) {
-//            movingBarIcon.setValue(i);
-//            i++;
-//            try {
-//                Thread.sleep(10);
-//            } catch (Exception e) {
-//            }
-//        }
+        counter=0;
+        firstTime=0;
+        ActionListener listener = new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                movingBarsize=size;
+                counter++;
+                movingBarIcon.setValue(counter);
+                System.out.println(counter);
+                if (counter>size) {
+                    timer.stop();
+                }
+            }
+        };
+        timer = new Timer(1000, listener);
+        timer.start();
+    }
+    public void pauseMovingBar()
+    {
+        if(firstTime==0)
+            counter2=counter;
+        timer.stop();
+        firstTime++;
     }
     public void removeMovingBar()
     {
         if(movingbarAlive==1)
         {
+            timer.stop();
             this.remove(movingBarIcon);
         }
     }
