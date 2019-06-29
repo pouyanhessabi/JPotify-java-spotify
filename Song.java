@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Map;
 import java.io.*;
+/**
+ * The Responder class keeping the mp3 file
+ * @author omid mahyar and pouyan hesabi *
+ * @version    1.0  (1398/04/01)
+ */
 public class Song implements Serializable {
     private String path;
     private String name;
@@ -30,9 +35,10 @@ public class Song implements Serializable {
         songPic();
         setAlbumName();
         setSongTime();
-//        setName();
-//        print();
     }
+    /**
+     * extracting mp3 file info
+     */
     public void creatMp3File() {
         {
             try {
@@ -48,6 +54,9 @@ public class Song implements Serializable {
             }
         }
     }
+    /**
+     * extracting mp3 file time
+     */
     public void setSongTime()  {
         File file=new File(path);
         Long microseconds;
@@ -72,7 +81,9 @@ public class Song implements Serializable {
             }
         }
     }
-
+    /**
+     * extracting mp3 file picture
+     */
     public void songPic()
     {
         if (mp3file.hasId3v2Tag()) {
@@ -90,6 +101,9 @@ public class Song implements Serializable {
         }
 
 }
+    /**
+     * seting mp3 file picture
+     */
     public void setArtistName() {
         if (mp3file.hasId3v2Tag()) {
             ID3v2 id3v2Tag = mp3file.getId3v2Tag();
@@ -98,6 +112,9 @@ public class Song implements Serializable {
                 artistName="NO ARTIST NAME";
         }
     }
+    /**
+     * seting mp3 file Album
+     */
     public void setAlbumName()
     {
         if(mp3file.hasId3v2Tag())
@@ -136,10 +153,4 @@ public class Song implements Serializable {
     public int getTimeOfSong() {
         return timeOfSong;
     }
-
-    public void print()
-    {
-        System.out.println(artistName);
-    }
-
 }

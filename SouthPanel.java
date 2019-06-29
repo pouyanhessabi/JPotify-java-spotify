@@ -10,12 +10,12 @@ public class SouthPanel extends JPanel {
     private IconForButton stopIcon;
     private IconForButton nextIcon;
     private IconForButton previousIcon;
-    private static MyJSlider volumeIcon;
+    private static VolumeJSlider volumeIcon;
     private int songNameIsAlive=0;
     private int movingbarAlive=0;
     Timer timer;
     private Label songName,songArtist;
-    MyJSlider movingBarIcon;
+    MovingBarJslider movingBarIcon;
     JButton jButton;
     int counter2,counter,movingBarsize,firstTime=0;
     JButton addTofavorite=new JButton("+ favorite");
@@ -32,20 +32,24 @@ public class SouthPanel extends JPanel {
         this.add(nextIcon);
         stopIcon=new IconForButton("icons/stop.png");
         this.add(stopIcon);
-        volumeIcon=new MyJSlider(1,100,50);
+        volumeIcon=new VolumeJSlider(1,100,50);
         volumeIcon.setPreferredSize(new Dimension(80,20));
         VolumeListener volumeListener=new VolumeListener();
         volumeIcon.addMouseListener(volumeListener);
         this.add(volumeIcon);
     }
-    public void StopMovingBar()
+    public void stopMovingBar()
     {
         timer.stop();
         movingBarIcon.setValue(0);
     }
+    public void stopMovingBar2()
+    {
+        timer.stop();
+    }
     public void addMovingBar(int size) {
 
-        movingBarIcon = new MyJSlider(1, size, 1);
+        movingBarIcon = new MovingBarJslider(1, size, 1);
         movingBarIcon.setPreferredSize(new Dimension(700, 20));
         this.add(movingBarIcon);
             movingbarAlive = 1;
@@ -66,16 +70,15 @@ public class SouthPanel extends JPanel {
         timer.start();
     }
 
-    public void moveMovingBar(int size)
+    public void moveMovingBar(int start,int size)
     {
-        counter=0;
+        counter=start;
         firstTime=0;
         ActionListener listener = new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 movingBarsize=size;
                 counter++;
                 movingBarIcon.setValue(counter);
-                System.out.println(counter);
                 if (counter>size) {
                     timer.stop();
                 }

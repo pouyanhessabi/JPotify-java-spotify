@@ -3,12 +3,21 @@ import javazoom.jl.player.Player;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+/**
+ * The Responder class mange playing mp3 file
+ * @author omid mahyar and pouyan hesabi *
+ * @version    1.0  (1398/04/02)
+ */
 public class MusicPlayer {
 
     FileInputStream fileInputStream;
     private long pausePosition;
     private long total;
     Player player;
+    /**
+     * playing a song
+     * @param path a string from song who represent path of mp3 file
+     */
     public synchronized void play(String path) throws FileNotFoundException {
         new Thread(() -> {
             try {
@@ -36,6 +45,9 @@ public class MusicPlayer {
         }).start();
 
     }
+    /**
+     * pause a song and change pausePosition
+     */
     public void pause()
     {
         try {
@@ -45,16 +57,23 @@ public class MusicPlayer {
         }
         player.close();
     }
+    /**
+     * stop a song
+     */
     public void stop()
     {
         player.close();
     }
-    public void resume(String name) throws FileNotFoundException {
+    /**
+     * resume a song
+     * @param path a string from song who represent path of mp3 file
+     */
+    public void resume(String path) throws FileNotFoundException {
         new Thread(){
             public void run() {
                 try {
                     try {
-                        fileInputStream = new FileInputStream(name);
+                        fileInputStream = new FileInputStream(path);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -66,6 +85,35 @@ public class MusicPlayer {
                     }
                     try {
                         fileInputStream.skip(total-pausePosition);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    player.play();
+                } catch (JavaLayerException e) {
+                    e.printStackTrace();
+                }
+            }
+        } .start();
+    }
+    public void resumeForMovingbar(double percent,String path)
+    {
+        new Thread(){
+            public void run() {
+                try {
+                    try {
+                        fileInputStream = new FileInputStream(path);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        player = new Player(fileInputStream);
+                    } catch (JavaLayerException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        long movingBarposition=(long)(total*percent);
+                        fileInputStream.skip(movingBarposition);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
