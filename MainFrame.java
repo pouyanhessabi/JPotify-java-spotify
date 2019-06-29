@@ -5,10 +5,12 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+
 /**
  * The Responder class  manage main frame
+ *
  * @author omid mahyar and pouyan hesabi *
- * @version    1.0  (1398/04/04)
+ * @version 1.0  (1398/04/04)
  */
 public class MainFrame extends JFrame {
     private String userName;
@@ -41,6 +43,7 @@ public class MainFrame extends JFrame {
     Album recentlyAlbum;
     private volatile String songInfo = null;
     private volatile boolean clicked = false;
+
     public MainFrame() {
         counter = 1;
         counter = 0;
@@ -48,7 +51,7 @@ public class MainFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(700, 1300);
         this.add(southPanel, BorderLayout.PAGE_END);
-        this.setIconImage(new ImageIcon("icons/spotifyIcon.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH));
+        this.setIconImage(new ImageIcon("icons/spotifyIcon.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         this.add(northPanel, BorderLayout.NORTH);
         this.setVisible(true);
         northPanel.searchButton.addActionListener(new ActionListenerForSearch());
@@ -167,13 +170,14 @@ public class MainFrame extends JFrame {
         rightScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         rightScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         this.add(rightScrollPane, BorderLayout.EAST);
-        JScrollPane centerScrollPane=new JScrollPane(centerPanel);
-        centerScrollPane.setPreferredSize(new Dimension(750,3000));
+        JScrollPane centerScrollPane = new JScrollPane(centerPanel);
+        centerScrollPane.setPreferredSize(new Dimension(750, 3000));
         centerScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         centerScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        this.add(centerScrollPane,BorderLayout.CENTER);
+        this.add(centerScrollPane, BorderLayout.CENTER);
         this.pack();
     }
+
     public String getUserName() {
         return userName;
     }
@@ -202,6 +206,7 @@ public class MainFrame extends JFrame {
     public synchronized void setClicked(boolean clicked) {
         this.clicked = clicked;
     }
+
     /**
      * creating favarote play list
      */
@@ -209,6 +214,7 @@ public class MainFrame extends JFrame {
         playLists.setAlbum(favorite);
         leftPanel.getFavoriteSongs().addActionListener(new ActionListenerForPlayList());
     }
+
     /**
      * creating shard play list
      */
@@ -216,10 +222,12 @@ public class MainFrame extends JFrame {
         playLists.setAlbum(sharedPlaylist);
         leftPanel.getSharedPlaylist().addActionListener(new ActionListenerForPlayList());
     }
+
     /**
      * The Responder class  action listtenr for add to library button
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/04)
+     * @version 1.0  (1398/04/04)
      */
     private class AcrionlistenerForAddTolibrary implements ActionListener {
         public void actionPerformed(ActionEvent event) {
@@ -253,10 +261,12 @@ public class MainFrame extends JFrame {
             }
         }
     }
+
     /**
      * The Responder class  actionListener for songs Butten in left panel
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/04)
+     * @version 1.0  (1398/04/04)
      */
     private class ActionListenerForSongsButten implements ActionListener {
         int status;
@@ -297,10 +307,12 @@ public class MainFrame extends JFrame {
             southPanel.getPreviousIcon().addActionListener(actionListenerForNextAndPrevious2);
         }
     }
+
     /**
      * The Responder class  actionListener for play butten in sotht panel
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/05)
+     * @version 1.0  (1398/04/05)
      */
     private class ActionListenerForPlay implements ActionListener {
         @Override
@@ -323,8 +335,7 @@ public class MainFrame extends JFrame {
                     e1.printStackTrace();
                 }
 
-            }
-            else {
+            } else {
                 southPanel.getPlayIcon().setIcon(new ImageIcon("icons/play.png"));
                 southPanel.pauseMovingBar();
                 musicPlayer.pause();
@@ -332,10 +343,12 @@ public class MainFrame extends JFrame {
             counter++;
         }
     }
+
     /**
      * The Responder class  actionListener for album Butten in left panel
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/04)
+     * @version 1.0  (1398/04/04)
      */
     private class ActionListenerForAlbumButton implements ActionListener {
         @Override
@@ -362,10 +375,12 @@ public class MainFrame extends JFrame {
             centerPanel.setVisible(true);
         }
     }
+
     /**
      * The Responder class  actionListener for chose albums who created  and open them in center panel
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/06)
+     * @version 1.0  (1398/04/06)
      */
     private class ActionListenerForAlbumButtonIncenterpanel implements ActionListener {
         @Override
@@ -401,10 +416,12 @@ public class MainFrame extends JFrame {
             }
         }
     }
+
     /**
      * The Responder class  actionListener for choose songs and play them in center panel
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/06)
+     * @version 1.0  (1398/04/06)
      */
     private class ActionListenerForSongButtonInCenterPanel implements ActionListener {
         int status;
@@ -442,7 +459,7 @@ public class MainFrame extends JFrame {
                 }
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        southPanel.moveMovingBar(0,movingBarSize);
+                        southPanel.moveMovingBar(0, movingBarSize);
                     }
                 });
                 counter1 = 1;
@@ -479,10 +496,12 @@ public class MainFrame extends JFrame {
             }
         }
     }
+
     /**
      * The Responder class  actionListener for stop music
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/07)
+     * @version 1.0  (1398/04/07)
      */
     private class ActionListenerForStopButten implements ActionListener {
         @Override
@@ -493,10 +512,12 @@ public class MainFrame extends JFrame {
             counter = 0;
         }
     }
+
     /**
      * The Responder class  actionListener  for add new play list in left panel
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/07)
+     * @version 1.0  (1398/04/07)
      */
     private class ActionListenerForAddPlaylistButtenInCenter implements ActionListener {
         @Override
@@ -515,10 +536,12 @@ public class MainFrame extends JFrame {
 
         }
     }
+
     /**
      * The Responder class  actionListener for albums who created in center panel
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/06)
+     * @version 1.0  (1398/04/06)
      */
     private class ActionListenerForPlayList implements ActionListener {
         @Override
@@ -564,10 +587,12 @@ public class MainFrame extends JFrame {
             centerPanel.setVisible(true);
         }
     }
+
     /**
      * The Responder class  actionListener for remove a play list
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/07)
+     * @version 1.0  (1398/04/07)
      */
     private class ActionListenerForRemoveFromPlaylistButton implements ActionListener {
         @Override
@@ -590,10 +615,12 @@ public class MainFrame extends JFrame {
             centerPanel.setVisible(true);
         }
     }
+
     /**
      * The Responder class  actionListener for add a play list in centeral panel
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/06)
+     * @version 1.0  (1398/04/06)
      */
     private class ActionListenerForAddPlaylistButten implements ActionListener {
         @Override
@@ -608,10 +635,12 @@ public class MainFrame extends JFrame {
 
         }
     }
+
     /**
      * The Responder class  actionListener for remove play list in center panel
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/06)
+     * @version 1.0  (1398/04/06)
      */
     private class ActionListenerForRemovePlaylistButtenInCenter implements ActionListener {
         @Override
@@ -635,10 +664,12 @@ public class MainFrame extends JFrame {
 
         }
     }
+
     /**
      * The Responder class  actionListener for rename play list in center panel
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/08)
+     * @version 1.0  (1398/04/08)
      */
     private class ActionListenerForRenamePlaylistButtenInCenter1 implements ActionListener {
         @Override
@@ -658,10 +689,12 @@ public class MainFrame extends JFrame {
 
         }
     }
+
     /**
      * The Responder class  actionListener for enter new name fromn text fieild
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/06)
+     * @version 1.0  (1398/04/06)
      */
     private class ActionListenerForRenamePlaylistButtenInCenter2 implements ActionListener {
         @Override
@@ -691,10 +724,12 @@ public class MainFrame extends JFrame {
             leftPanel.setVisible(true);
         }
     }
+
     /**
      * The Responder class  actionListener for newxt and previous in sotht panel
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/06)
+     * @version 1.0  (1398/04/06)
      */
     private class ActionListenerForNextAndPrevious implements ActionListener {
         int status;
@@ -736,7 +771,7 @@ public class MainFrame extends JFrame {
                         }
                         SwingUtilities.invokeLater(new Runnable() {
                             public void run() {
-                                southPanel.moveMovingBar(0,movingBarSize);
+                                southPanel.moveMovingBar(0, movingBarSize);
                             }
                         });
                         break;
@@ -772,7 +807,7 @@ public class MainFrame extends JFrame {
                                 }
                                 SwingUtilities.invokeLater(new Runnable() {
                                     public void run() {
-                                        southPanel.moveMovingBar(0,movingBarSize);
+                                        southPanel.moveMovingBar(0, movingBarSize);
                                     }
                                 });
                                 break;
@@ -813,7 +848,7 @@ public class MainFrame extends JFrame {
                                 }
                                 SwingUtilities.invokeLater(new Runnable() {
                                     public void run() {
-                                        southPanel.moveMovingBar(0,movingBarSize);
+                                        southPanel.moveMovingBar(0, movingBarSize);
                                     }
                                 });
                                 break;
@@ -825,10 +860,12 @@ public class MainFrame extends JFrame {
             }
         }
     }
+
     /**
      * The Responder class  actionListener for home bottun
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/08)
+     * @version 1.0  (1398/04/08)
      */
     private class ActionListenerForHome implements ActionListener {
 
@@ -843,8 +880,9 @@ public class MainFrame extends JFrame {
 
     /**
      * The Responder class  actionListener for search in library
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/07)
+     * @version 1.0  (1398/04/07)
      */
     private class ActionListenerForSearch implements ActionListener {
 
@@ -877,10 +915,12 @@ public class MainFrame extends JFrame {
 
         }
     }
+
     /**
      * The Responder class  actionListener for add too favorite
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/08)
+     * @version 1.0  (1398/04/08)
      */
     private class ActionListenerForFavoriteButten implements ActionListener {
 
@@ -889,8 +929,8 @@ public class MainFrame extends JFrame {
             for (int i = 0; i < playLists.getAlbumArrayList().size(); i++) {
                 if (playLists.getAlbumArrayList().get(i).getName().equals("Favorites")) {
                     for (int j = 0; j < library.getSongs().size(); j++) {
-                        if (library.getSongs().get(i).getPath().equals(pathSong)) {
-                            playLists.getAlbumArrayList().get(i).setSong(library.getSongs().get(i));
+                        if (library.getSongs().get(j).getPath().equals(pathSong)) {
+                            playLists.getAlbumArrayList().get(i).setSong(library.getSongs().get(j));
                             break;
                         }
                     }
@@ -899,10 +939,12 @@ public class MainFrame extends JFrame {
             }
         }
     }
+
     /**
      * The Responder class  actionListener for refresh friend activity
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/07)
+     * @version 1.0  (1398/04/07)
      */
     private class ActionListenerForRefreshingRight implements ActionListener {
 
@@ -929,10 +971,12 @@ public class MainFrame extends JFrame {
     public int getMaximum() {
         return southPanel.movingBarIcon.getModel().getMaximum();
     }
+
     /**
      * The Responder class  actionListener for remove seek move bar
+     *
      * @author omid mahyar and pouyan hesabi *
-     * @version    1.0  (1398/04/07)
+     * @version 1.0  (1398/04/07)
      */
     private class addMouseListener extends MouseAdapter {
         @Override
@@ -940,14 +984,14 @@ public class MainFrame extends JFrame {
             Point p = e.getPoint();
             double percent = p.x / ((double) southPanel.movingBarIcon.getWidth());
             musicPlayer.stop();
-            musicPlayer.resumeForMovingbar(percent,pathSong);
+            musicPlayer.resumeForMovingbar(percent, pathSong);
             int range = getMaximum() - getMinimum();
             double newVal = range * percent;
             int result = (int) (getMinimum() + newVal);
             southPanel.stopMovingBar2();
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    southPanel.moveMovingBar(result,movingBarSize);
+                    southPanel.moveMovingBar(result, movingBarSize);
                 }
             });
 

@@ -1,8 +1,7 @@
 import javax.swing.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
 
@@ -26,16 +25,15 @@ public class Main {
         }
         MainFrame frame = new MainFrame();
         frame.setUserName(userFrame.getText());
-        int userAlive=0;
+        int userAlive = 0;
         UserNames userNamesFromFile = null;
-        String nameOfLibrary,nameOfPlaylists,nameOfAlbum;
-        nameOfLibrary=userFrame.getText()+"library.txt";
-        nameOfAlbum=userFrame.getText()+"album.txt";
-        nameOfPlaylists=userFrame.getText()+"playlists.txt";
+        String nameOfLibrary, nameOfPlaylists, nameOfAlbum;
+        nameOfLibrary = userFrame.getText() + "library.txt";
+        nameOfAlbum = userFrame.getText() + "album.txt";
+        nameOfPlaylists = userFrame.getText() + "playlists.txt";
 
-        File file0=new File("UeserNames.txt");
-        if(file0.exists())
-        {
+        File file0 = new File("UeserNames.txt");
+        if (file0.exists()) {
             ObjectInputStream objectInputStream =
                     null;
             try {
@@ -59,27 +57,23 @@ public class Main {
                 e.printStackTrace();
             }
         }
-        if(userNamesFromFile!=null)
-        {
+        if (userNamesFromFile != null) {
             int i;
-            for (i = 0; i <userNamesFromFile.getUserNameArraylist().size() ; i++) {
+            for (i = 0; i < userNamesFromFile.getUserNameArraylist().size(); i++) {
                 frame.userNames.setUserNameArraylist(userNamesFromFile.getUserNameArraylist().get(i));
-                if(userNamesFromFile.getUserNameArraylist().get(i).equals(userFrame.getText()))
-                {
-                    userAlive=1;
+                if (userNamesFromFile.getUserNameArraylist().get(i).equals(userFrame.getText())) {
+                    userAlive = 1;
                 }
             }
-            if(userAlive==0)
+            if (userAlive == 0)
                 frame.userNames.setUserNameArraylist(userFrame.getText());
 
-        }
-        else{
+        } else {
             frame.userNames.setUserNameArraylist(userFrame.getText());
         }
         Album library = null;
-        File file=new File(nameOfLibrary);
-        if(file.exists()&&(file.length()>122))
-        {
+        File file = new File(nameOfLibrary);
+        if (file.exists() && (file.length() > 122)) {
             ObjectInputStream objectInputStream =
                     null;
             try {
@@ -103,16 +97,14 @@ public class Main {
                 e.printStackTrace();
             }
         }
-        if(library!=null)
-        {
-            for (int i = 0; i <library.getSongs().size() ; i++) {
+        if (library != null) {
+            for (int i = 0; i < library.getSongs().size(); i++) {
                 frame.library.setSong(library.getSongs().get(i));
             }
         }
         Albums albums = null;
-        File file1=new File(nameOfAlbum);
-        if(file1.exists()&&(file1.length()>122))
-        {
+        File file1 = new File(nameOfAlbum);
+        if (file1.exists() && (file1.length() > 122)) {
             ObjectInputStream objectInputStream =
                     null;
             try {
@@ -136,16 +128,14 @@ public class Main {
                 e.printStackTrace();
             }
         }
-        if(albums!=null)
-        {
-            for (int i = 0; i <albums.getAlbumArrayList().size() ; i++) {
+        if (albums != null) {
+            for (int i = 0; i < albums.getAlbumArrayList().size(); i++) {
                 frame.albumArrayList.setAlbum(albums.getAlbumArrayList().get(i));
             }
         }
         Albums albums1 = null;
-        File file2=new File(nameOfPlaylists);
-        if(file2.exists()&&(file2.length()>122))
-        {
+        File file2 = new File(nameOfPlaylists);
+        if (file2.exists() && (file2.length() > 122)) {
             ObjectInputStream objectInputStream =
                     null;
             try {
@@ -169,23 +159,18 @@ public class Main {
                 e.printStackTrace();
             }
         }
-        int favoriteIsAlive=0,sharedPlaylistIsAlive=0;
-        if(albums1!=null)
-        {
-            for (int i = 0; i <albums1.getAlbumArrayList().size() ; i++) {
+        int favoriteIsAlive = 0, sharedPlaylistIsAlive = 0;
+        if (albums1 != null) {
+            for (int i = 0; i < albums1.getAlbumArrayList().size(); i++) {
                 frame.playLists.setAlbum(albums1.getAlbumArrayList().get(i));
-                if(albums1.getAlbumArrayList().get(i).getName().equals("Favorites"))
-                {
+                if (albums1.getAlbumArrayList().get(i).getName().equals("Favorites")) {
                     frame.leftPanel.getFavoriteSongs().addActionListener(frame.actionListenerForPlayList);
-                    favoriteIsAlive=1;
+                    favoriteIsAlive = 1;
 
-                }
-                else if(albums1.getAlbumArrayList().get(i).getName().equals("SharedPlaylist"))
-                {
+                } else if (albums1.getAlbumArrayList().get(i).getName().equals("SharedPlaylist")) {
                     frame.leftPanel.getSharedPlaylist().addActionListener(frame.actionListenerForPlayList);
-                    sharedPlaylistIsAlive=1;
-                }
-                else{
+                    sharedPlaylistIsAlive = 1;
+                } else {
                     frame.leftPanel.getPlaylists().clear();
                     frame.leftPanel.addLableOfplaylist(frame.playLists.getAlbumArrayList().get(i).getName());
                     frame.leftPanel.getPlaylists().get(frame.leftPanel.getPlaylists().size() - 1).addActionListener(frame.actionListenerForPlayList);
@@ -195,27 +180,57 @@ public class Main {
                 frame.leftPanel.setVisible(true);
             }
         }
-        if(favoriteIsAlive==0)
-        {
+        if (favoriteIsAlive == 0) {
             frame.creatFavorite();
         }
-        if(sharedPlaylistIsAlive==0)
-        {
+        if (sharedPlaylistIsAlive == 0) {
 
             frame.creatSharedPlayList();
         }
-        String myUsername=frame.getUserName();
-        Friend friend= new Friend(myUsername,"127.0.0.1",5000,"127.0.0.1",4000);
+        String myUsername = frame.getUserName();
+        FileReader fileReader = null;
+        try {
+            fileReader = new FileReader("IPList.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Scanner scanner = new Scanner(fileReader);
+        ArrayList<String> IPList = new ArrayList<>(100);
+        while (scanner.hasNext())
+            IPList.add(scanner.next());
+        try {
+            fileReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String myIpHost = "127.0.0.1";
+        int myPort = 4000;
+        String friendIp = "127.0.0.1";
+        int friendPort = 5000;
+
+        boolean [] allowAccess=new boolean[IPList.size()];
+        for (int i = 0; i <IPList.size() ; i++) {
+            allowAccess[i]=false;
+        }
+        for (int i = 0; i <IPList.size() ; i++) {
+            if (IPList.get(i).equals(friendIp))
+                allowAccess[i]=true;
+        }
+        Friend friend=null;
+        for (int i = 0; i <IPList.size() ; i++) {
+            if (allowAccess[i])
+                friend = new Friend(frame.getUserName(), myIpHost, myPort, friendIp, friendPort);
+        }
+
         while (true) {
-            if (frame.isClicked() == true ){
+            if (frame.isClicked() == true) {
                 try {
-                    friend.sendData(frame.getSongInfo());
+                    friend.sendData(myUsername);
                     frame.setClicked(false);
                 } catch (IOException e) {
-//                    e.printStackTrace();
                 }
             }
-
         }
 
     }

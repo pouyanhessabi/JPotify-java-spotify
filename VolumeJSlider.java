@@ -2,11 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 class VolumeJSlider extends JSlider {
 
 
-    private   UIDefaults d;
-    private   UIDefaults z;
+    private UIDefaults d;
+    private UIDefaults z;
+
     public VolumeJSlider(int min, int max, int value) {
         super(min, max, value);
         addMouseListener(new MouseAdapter() {
@@ -16,19 +18,20 @@ class VolumeJSlider extends JSlider {
                 double percent = p.x / ((double) getWidth());
                 int range = getMaximum() - getMinimum();
                 double newVal = range * percent;
-                int result = (int)(getMinimum() + newVal);
+                int result = (int) (getMinimum() + newVal);
                 setValue(result);
             }
         });
         this.setOpaque(false);
         d = new UIDefaults();
         d.put("Slider:SliderTrack[Enabled].backgroundPainter", new Painter<VolumeJSlider>() {
-            @Override public void paint(Graphics2D g, VolumeJSlider c, int w, int h) {
-                int arc         = 10;
+            @Override
+            public void paint(Graphics2D g, VolumeJSlider c, int w, int h) {
+                int arc = 10;
                 int trackHeight = 8;
-                int trackWidth  = w - 2;
-                int fillTop     = 4;
-                int fillLeft    = 1;
+                int trackWidth = w - 2;
+                int fillTop = 4;
+                int fillLeft = 1;
 
                 g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON);
@@ -37,16 +40,17 @@ class VolumeJSlider extends JSlider {
                 g.fillRoundRect(fillLeft, fillTop, trackWidth, trackHeight, arc, arc);
 
                 int fillBottom = fillTop + trackHeight;
-                int fillRight  = xPositionForValue(
+                int fillRight = xPositionForValue(
                         c.getValue(), c,
                         new Rectangle(fillLeft, fillTop, trackWidth, fillBottom - fillTop));
 
-                g.setColor(new Color(40,215,40));
+                g.setColor(new Color(40, 215, 40));
                 g.fillRect(fillLeft + 1, fillTop + 1, fillRight - fillLeft, fillBottom - fillTop);
 
                 g.setColor(Color.GRAY);
                 g.drawRoundRect(fillLeft, fillTop, trackWidth, trackHeight, arc, arc);
             }
+
             protected int xPositionForValue(int value, VolumeJSlider slider, Rectangle trackRect) {
                 int min = slider.getMinimum();
                 int max = slider.getMaximum();
@@ -69,12 +73,13 @@ class VolumeJSlider extends JSlider {
 
         z = new UIDefaults();
         z.put("Slider:SliderTrack[Enabled].backgroundPainter", new Painter<VolumeJSlider>() {
-            @Override public void paint(Graphics2D g, VolumeJSlider c, int w, int h) {
-                int arc         = 10;
+            @Override
+            public void paint(Graphics2D g, VolumeJSlider c, int w, int h) {
+                int arc = 10;
                 int trackHeight = 8;
-                int trackWidth  = w - 2;
-                int fillTop     = 4;
-                int fillLeft    = 1;
+                int trackWidth = w - 2;
+                int fillTop = 4;
+                int fillLeft = 1;
 
                 g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON);
@@ -83,7 +88,7 @@ class VolumeJSlider extends JSlider {
                 g.fillRoundRect(fillLeft, fillTop, trackWidth, trackHeight, arc, arc);
 
                 int fillBottom = fillTop + trackHeight;
-                int fillRight  = xPositionForValue(
+                int fillRight = xPositionForValue(
                         c.getValue(), c,
                         new Rectangle(fillLeft, fillTop, trackWidth, fillBottom - fillTop));
 
@@ -93,6 +98,7 @@ class VolumeJSlider extends JSlider {
                 g.setColor(Color.GRAY);
                 g.drawRoundRect(fillLeft, fillTop, trackWidth, trackHeight, arc, arc);
             }
+
             protected int xPositionForValue(int value, VolumeJSlider slider, Rectangle trackRect) {
                 int min = slider.getMinimum();
                 int max = slider.getMaximum();

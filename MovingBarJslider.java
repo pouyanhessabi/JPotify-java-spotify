@@ -4,8 +4,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class MovingBarJslider extends JSlider {
-    private   UIDefaults d;
-    private   UIDefaults z;
+    private UIDefaults d;
+    private UIDefaults z;
+
     public MovingBarJslider(int min, int max, int value) {
         super(min, max, value);
         this.setOpaque(false);
