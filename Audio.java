@@ -29,11 +29,6 @@ import javax.sound.sampled.Mixer.Info;
 
 public class Audio {
 
-    public static void main(String[] args) throws Exception {
-        System.out.println(getHierarchyInfo());
-        System.out.println(getMasterOutputVolume());
-    }
-
     public static void setMasterOutputVolume(float value) {
         if (value < 0 || value > 1)
             throw new IllegalArgumentException(

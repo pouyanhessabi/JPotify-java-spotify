@@ -5,7 +5,11 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
-
+/**
+ * The Responder class  manage main frame
+ * @author omid mahyar and pouyan hesabi *
+ * @version    1.0  (1398/04/04)
+ */
 public class MainFrame extends JFrame {
     private String userName;
     private boolean usernameExist;
@@ -47,13 +51,14 @@ public class MainFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1300, 700);
         this.add(southPanel, BorderLayout.PAGE_END);
+        this.setIconImage(new ImageIcon("icons/spotifyIcon.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH));
 //        this.add(rightPanel, BorderLayout.EAST);
-        this.getContentPane().add(centerPanel, BorderLayout.CENTER);
+//        this.getContentPane().add(centerPanel, BorderLayout.CENTER);
         this.add(northPanel, BorderLayout.NORTH);
         this.setVisible(true);
         northPanel.searchButton.addActionListener(new ActionListenerForSearch());
-        MyListener myListener = new MyListener();
-        leftPanel.getAddToLibraryIcon().addActionListener(myListener);
+        AcrionlistenerForAddTolibrary AcrionlistenerForAddTolibrary = new AcrionlistenerForAddTolibrary();
+        leftPanel.getAddToLibraryIcon().addActionListener(AcrionlistenerForAddTolibrary);
         ActionListenerForSongsButten actionListenerForSongsButten = new ActionListenerForSongsButten(1);
         leftPanel.getSongs().addActionListener(actionListenerForSongsButten);
         southPanel.getPlayIcon().addActionListener(new ActionListenerForPlay());
@@ -169,6 +174,11 @@ public class MainFrame extends JFrame {
         rightScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         rightScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.add(rightScrollPane, BorderLayout.EAST);
+        JScrollPane centerScrollPane=new JScrollPane(centerPanel);
+        centerScrollPane.setPreferredSize(new Dimension(750,3000));
+        centerScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        centerScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        this.add(centerScrollPane,BorderLayout.CENTER);
         this.pack();
     }
     public String getUserName() {
@@ -199,18 +209,26 @@ public class MainFrame extends JFrame {
     public synchronized void setClicked(boolean clicked) {
         this.clicked = clicked;
     }
-
+    /**
+     * creating favarote play list
+     */
     public void creatFavorite() {
         playLists.setAlbum(favorite);
         leftPanel.getFavoriteSongs().addActionListener(new ActionListenerForPlayList());
     }
-
+    /**
+     * creating shard play list
+     */
     public void creatSharedPlayList() {
         playLists.setAlbum(sharedPlaylist);
         leftPanel.getSharedPlaylist().addActionListener(new ActionListenerForPlayList());
     }
-
-    private class MyListener implements ActionListener {
+    /**
+     * The Responder class  action listtenr for add to library button
+     * @author omid mahyar and pouyan hesabi *
+     * @version    1.0  (1398/04/04)
+     */
+    private class AcrionlistenerForAddTolibrary implements ActionListener {
         public void actionPerformed(ActionEvent event) {
             JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
             String name = "", path = "";
@@ -240,15 +258,13 @@ public class MainFrame extends JFrame {
                 }
                 library.setSong(song);
             }
-            System.out.println(albumArrayList.getAlbumArrayList().size());
-//            for (int j = 0; j <albumArrayList.getAlbumArrayList().size() ; j++) {
-//                for (int k = 0; k <albumArrayList.getAlbumArrayList().get(j).getSongs().size(); k++) {
-//                    System.out.println(albumArrayList.getAlbumArrayList().get(j).getName()+"  "+albumArrayList.getAlbumArrayList().get(j).getSongs().get(k).getName());
-//                }
-//            }
         }
     }
-
+    /**
+     * The Responder class  actionListener for songs Butten in left panel
+     * @author omid mahyar and pouyan hesabi *
+     * @version    1.0  (1398/04/04)
+     */
     private class ActionListenerForSongsButten implements ActionListener {
         int status;
 
@@ -276,7 +292,6 @@ public class MainFrame extends JFrame {
                     centerPanel.jButtonsForSong.get(i1).addActionListener(actionListenerForButtonInCenterPanel1);
                 else if (status == 2)
                     centerPanel.jButtonsForSong.get(i1).addActionListener(actionListenerForButtonInCenterPanel2);
-
             }
             for (int i2 = 0; i2 < library.getSongs().size(); i2++) {
                 centerPanel.addButton(i2);
@@ -290,7 +305,11 @@ public class MainFrame extends JFrame {
             southPanel.getPreviousIcon().addActionListener(actionListenerForNextAndPrevious2);
         }
     }
-
+    /**
+     * The Responder class  actionListener for play butten in sotht panel
+     * @author omid mahyar and pouyan hesabi *
+     * @version    1.0  (1398/04/05)
+     */
     private class ActionListenerForPlay implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -313,7 +332,6 @@ public class MainFrame extends JFrame {
                 }
 
             }
-//
             else {
                 southPanel.getPlayIcon().setIcon(new ImageIcon("icons/play.png"));
                 southPanel.pauseMovingBar();
@@ -322,7 +340,11 @@ public class MainFrame extends JFrame {
             counter++;
         }
     }
-
+    /**
+     * The Responder class  actionListener for album Butten in left panel
+     * @author omid mahyar and pouyan hesabi *
+     * @version    1.0  (1398/04/04)
+     */
     private class ActionListenerForAlbumButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -353,7 +375,6 @@ public class MainFrame extends JFrame {
     private class ActionListenerForAlbumButtonIncenterpanel implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-//            System.out.println(e.getActionCommand());
             String albumName;
             clickAlbums++;
             centerPanel.removeAll();

@@ -30,7 +30,7 @@ public class MovingBarJslider extends JSlider {
                         c.getValue(), c,
                         new Rectangle(fillLeft, fillTop, trackWidth, fillBottom - fillTop));
 
-                g.setColor(new Color(30, 215, 96));
+                g.setColor(new Color(40, 215, 40));
                 g.fillRect(fillLeft + 1, fillTop + 1, fillRight - fillLeft, fillBottom - fillTop);
 
                 g.setColor(Color.GRAY);
@@ -78,7 +78,7 @@ public class MovingBarJslider extends JSlider {
                         c.getValue(), c,
                         new Rectangle(fillLeft, fillTop, trackWidth, fillBottom - fillTop));
 
-                g.setColor(new Color(8, 179, 68));
+                g.setColor(new Color(40, 215, 40));
                 g.fillRect(fillLeft + 1, fillTop + 1, fillRight - fillLeft, fillBottom - fillTop);
 
                 g.setColor(Color.GRAY);

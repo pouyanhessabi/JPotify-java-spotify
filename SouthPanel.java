@@ -4,7 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
+/**
+ * The Responder class manage south panel
+ * @author omid mahyar and pouyan hesabi *
+ * @version    1.0  (1398/04/06)
+ */
 public class SouthPanel extends JPanel {
     private IconForButton playIcon;
     private IconForButton stopIcon;
@@ -21,7 +25,8 @@ public class SouthPanel extends JPanel {
     JButton jButton;
     String timeValue;
     int counter2,counter,movingBarsize,firstTime=0;
-    JButton addTofavorite=new JButton("+ favorite");
+    IconForButton addTofavorite =new IconForButton("icons/heart.png");
+//    JButton addTofavorite=new JButton("+ favorite");
     public SouthPanel() {
         this.setBackground(Color.black);
         this.setPreferredSize(new Dimension(500,100));
@@ -41,15 +46,25 @@ public class SouthPanel extends JPanel {
         volumeIcon.addMouseListener(volumeListener);
         this.add(volumeIcon);
     }
+    /**
+     * stopd moving bar when stop button clicked
+     */
     public void stopMovingBar()
     {
         timer.stop();
         movingBarIcon.setValue(0);
     }
+    /**
+     * stopd moving bar when pause button clicked
+     */
     public void stopMovingBar2()
     {
         timer.stop();
     }
+    /**
+     * creating moving bar and add to south panel
+     * @param size a integer who size of moving bar
+     */
     public void addMovingBar(int size) {
         int min=size/60;
         int sec=size%60;
@@ -65,6 +80,9 @@ public class SouthPanel extends JPanel {
         this.add(totalTime);
             movingbarAlive = 1;
     }
+    /**
+     * resume moving bar move when resume button clicked
+     */
     public void resumeMovingBar()
     {
         ActionListener listener = new ActionListener() {
@@ -94,7 +112,11 @@ public class SouthPanel extends JPanel {
         timer = new Timer(1000, listener);
         timer.start();
     }
-
+    /**
+     * manage moving bar move
+     * @param start value of stating moving bar
+     * @param size a integer who size of moving bar
+     */
     public void moveMovingBar(int start,int size)
     {
         counter=start;
@@ -126,6 +148,9 @@ public class SouthPanel extends JPanel {
         timer = new Timer(1000, listener);
         timer.start();
     }
+    /**
+     * paused moving bar when pause button clicked
+     */
     public void pauseMovingBar()
     {
         if(firstTime==0)
@@ -133,6 +158,9 @@ public class SouthPanel extends JPanel {
         timer.stop();
         firstTime++;
     }
+    /**
+     * removing moving bar wheen new song played
+     */
     public void removeMovingBar()
     {
         if(movingbarAlive==1)
@@ -143,6 +171,9 @@ public class SouthPanel extends JPanel {
             this.remove(songTime);
         }
     }
+    /**
+     * removing artwork wheen new song played
+     */
     public void removeArtwork()
     {
         if(songNameIsAlive==1) {
@@ -152,6 +183,10 @@ public class SouthPanel extends JPanel {
         }
         songNameIsAlive=0;
     }
+    /**
+     * adding moving bar wheen new song played
+     * @param song a Song who adding artwork
+     */
     public void addArtwork(Song song){
 
         songNameIsAlive=1;
@@ -160,9 +195,10 @@ public class SouthPanel extends JPanel {
         jButton.setBorderPainted(false);
         jButton.setFocusPainted(false);
         jButton.setIcon(new ImageIcon(temp));
+        jButton.setBackground(Color.GREEN);
         this.add(jButton);
         songArtist=new Label(song.getArtistName());
-        songArtist.setForeground(Color.WHITE);
+        songArtist.setForeground(Color.GREEN);
         this.add(songArtist,FlowLayout.LEFT);
         songName=new Label(song.getName());
         songName.setForeground(Color.WHITE);
