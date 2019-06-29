@@ -42,7 +42,6 @@ public class Song implements Serializable {
     public void creatMp3File() {
         {
             try {
-//                System.out.println(path);
                 mp3file = new Mp3File(path);
                 id3v2Tag = mp3file.getId3v2Tag();
             } catch (IOException e) {

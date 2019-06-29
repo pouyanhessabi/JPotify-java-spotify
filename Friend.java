@@ -9,6 +9,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ * a class for both client and server.
+ * it can send and get data.
+ * the data that  a friend send,is a String.
+ * a string that refers to what song the friend is listening.
+ * don't forget in constructor you should give port and ip of client and server/
+ * @author pouyan hesabi and omidmahyar.
+ * @since 6/29/2019
+ * @version 1.0
+ */
 public class Friend {
 
 volatile private    String myIpHost;
@@ -32,7 +42,12 @@ volatile private static ArrayList<String> allData=new ArrayList<>(50);
         this.clientPort = clientPort;
         new Thread(new ServerThread()).start();
     }
-
+    /**
+     * a method that send the string that show a friend is listening the music with specific time and username.
+     * it doesn't return anything.
+     * @param outputData
+     * @throws IOException
+     */
     public synchronized void sendData(String outputData) throws IOException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date();
@@ -44,12 +59,19 @@ volatile private static ArrayList<String> allData=new ArrayList<>(50);
         //System.out.println(username+pass);
 //        getAllData().add(username+pass);
 //        mainFrame.getCopyOfAllData().add(username+pass);
-
+        out.flush();
         client.close();
     }
 
 
-
+    /**
+     * a class that implements an interface class(Runnable)
+     * only one method that get data with DataInputStream and throws IOException.
+     * @see     java.io.DataInputStream
+     * @see     java.lang.Thread
+     * @author pouyan hesabi and omid mahyar.
+     * @version 1.0
+     */
     private class ServerThread implements Runnable {
 
         @Override

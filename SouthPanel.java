@@ -25,7 +25,7 @@ public class SouthPanel extends JPanel {
     JButton jButton;
     String timeValue;
     int counter2,counter,movingBarsize,firstTime=0;
-    IconForButton addTofavorite =new IconForButton("icons/heart.png");
+    private IconForButton addTofavorite =new IconForButton("icons/heart.png");
 //    JButton addTofavorite=new JButton("+ favorite");
     public SouthPanel() {
         this.setBackground(Color.black);
@@ -70,11 +70,10 @@ public class SouthPanel extends JPanel {
         int sec=size%60;
         String jlabelText=min+":"+sec;
         totalTime=new JLabel(jlabelText);
-        totalTime.setForeground(Color.WHITE);
-        System.out.println(jlabelText);
+        totalTime.setForeground(Color.GREEN);
         movingBarIcon = new MovingBarJslider(1, size, 1);
         movingBarIcon.setPreferredSize(new Dimension(700, 20));
-        songTime.setForeground(Color.WHITE);
+        songTime.setForeground(Color.GREEN);
         this.add(songTime);
         this.add(movingBarIcon);
         this.add(totalTime);
@@ -103,7 +102,6 @@ public class SouthPanel extends JPanel {
 
                 songTime.setText(timeValue);
                 movingBarIcon.setValue(counter2);
-                System.out.println(counter2);
                 if (counter2>movingBarsize) {
                     timer.stop();
                 }
@@ -201,7 +199,7 @@ public class SouthPanel extends JPanel {
         songArtist.setForeground(Color.GREEN);
         this.add(songArtist,FlowLayout.LEFT);
         songName=new Label(song.getName());
-        songName.setForeground(Color.WHITE);
+        songName.setForeground(Color.GREEN);
         this.add(songName,FlowLayout.LEFT);
 //        jButton=new JButton("123");
 //       this.add(jButton,FlowLayout.LEFT);
@@ -225,11 +223,14 @@ public class SouthPanel extends JPanel {
         return previousIcon;
     }
 
+    public IconForButton getAddTofavorite() {
+        return addTofavorite;
+    }
+
     private static class VolumeListener implements MouseListener {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            System.out.println("clicked");
             Audio.setMasterOutputVolume(((float)volumeIcon.getValue()/100));
         }
 

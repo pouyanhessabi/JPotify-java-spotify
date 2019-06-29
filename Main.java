@@ -61,7 +61,6 @@ public class Main {
         }
         if(userNamesFromFile!=null)
         {
-            System.out.println("size of   "+userNamesFromFile.getUserNameArraylist().size());
             int i;
             for (i = 0; i <userNamesFromFile.getUserNameArraylist().size() ; i++) {
                 frame.userNames.setUserNameArraylist(userNamesFromFile.getUserNameArraylist().get(i));
@@ -76,10 +75,6 @@ public class Main {
         }
         else{
             frame.userNames.setUserNameArraylist(userFrame.getText());
-        }
-        for (int i = 0; i <frame.userNames.getUserNameArraylist().size() ; i++) {
-            System.out.println(frame.userNames.getUserNameArraylist().get(i)+"       "+i);
-
         }
         Album library = null;
         File file=new File(nameOfLibrary);
@@ -112,12 +107,10 @@ public class Main {
         {
             for (int i = 0; i <library.getSongs().size() ; i++) {
                 frame.library.setSong(library.getSongs().get(i));
-                System.out.println("from file    "+frame.library.getSongs().size());
             }
         }
         Albums albums = null;
         File file1=new File(nameOfAlbum);
-        System.out.println(file1.length());
         if(file1.exists()&&(file1.length()>122))
         {
             ObjectInputStream objectInputStream =
@@ -147,12 +140,10 @@ public class Main {
         {
             for (int i = 0; i <albums.getAlbumArrayList().size() ; i++) {
                 frame.albumArrayList.setAlbum(albums.getAlbumArrayList().get(i));
-                System.out.println("from file    "+frame.albumArrayList.getAlbumArrayList().size());
             }
         }
         Albums albums1 = null;
         File file2=new File(nameOfPlaylists);
-        System.out.println(file2.length());
         if(file2.exists()&&(file2.length()>122))
         {
             ObjectInputStream objectInputStream =

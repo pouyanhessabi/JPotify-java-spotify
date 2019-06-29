@@ -8,7 +8,7 @@ import java.awt.*;
 public class NorthPanel extends JPanel {
     JLabel name=new JLabel();
     JTextField searchArea=new JTextField();
-    JButton searchButton=new JButton("Search");
+    IconForButton searchButton=new IconForButton("icons/search.png");
     public NorthPanel() {
         this.setBackground(Color.DARK_GRAY);
         this.setLayout(new FlowLayout());
@@ -24,7 +24,7 @@ public class NorthPanel extends JPanel {
     public void addNameToNorthPanel(String s)
     {
         name.setText(s);
-        name.setForeground(Color.WHITE);
+        name.setForeground(Color.GREEN);
         this.add(name,FlowLayout.LEFT);
     }
 }
