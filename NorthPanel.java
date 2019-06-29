@@ -16,6 +16,7 @@ public class NorthPanel extends JPanel {
     public void addNameToNorthPanel(String s)
     {
         name.setText(s);
+        name.setForeground(Color.WHITE);
         this.add(name,FlowLayout.LEFT);
     }
 }

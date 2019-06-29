@@ -171,7 +171,6 @@ public class MainFrame extends JFrame {
         this.add(rightScrollPane, BorderLayout.EAST);
         this.pack();
     }
-
     public String getUserName() {
         return userName;
     }
@@ -409,8 +408,8 @@ public class MainFrame extends JFrame {
                         southPanel.removeMovingBar();
                         southPanel.addMovingBar(movingBarSize);
                         southPanel.movingBarIcon.addMouseListener(new addMouseListener());
-                        southPanel.removeSongNAme();
-                        southPanel.addSongNameAndImage(library.getSongs().get(j));
+                        southPanel.removeArtwork();
+                        southPanel.addArtwork(library.getSongs().get(j));
                         southPanel.getPlayIcon().setIcon(new ImageIcon("icons/pause.png"));
                         counter = 1;
                         break;
@@ -681,8 +680,9 @@ public class MainFrame extends JFrame {
                         movingBarSize = library.getSongs().get(j + previousOrNext).getTimeOfSong();
                         southPanel.removeMovingBar();
                         southPanel.addMovingBar(movingBarSize);
-                        southPanel.removeSongNAme();
-                        southPanel.addSongNameAndImage(library.getSongs().get(j + previousOrNext));
+                        southPanel.movingBarIcon.addMouseListener(new addMouseListener());
+                        southPanel.removeArtwork();
+                        southPanel.addArtwork(library.getSongs().get(j + previousOrNext));
                         try {
 
                             musicPlayer.play(pathSong);
@@ -712,11 +712,12 @@ public class MainFrame extends JFrame {
                         for (; i < size; i++) {
                             if (albumArrayList.getAlbumArrayList().get(j).getSongs().get(i).getPath().equals(pathSong)) {
                                 musicPlayer.stop();
-                                southPanel.removeSongNAme();
+                                southPanel.removeArtwork();
                                 movingBarSize = albumArrayList.getAlbumArrayList().get(j).getSongs().get(i + previousOrNext).getTimeOfSong();
                                 southPanel.removeMovingBar();
                                 southPanel.addMovingBar(movingBarSize);
-                                southPanel.addSongNameAndImage(albumArrayList.getAlbumArrayList().get(j).getSongs().get(i + previousOrNext));
+                                southPanel.movingBarIcon.addMouseListener(new addMouseListener());
+                                southPanel.addArtwork(albumArrayList.getAlbumArrayList().get(j).getSongs().get(i + previousOrNext));
                                 pathSong = albumArrayList.getAlbumArrayList().get(j).getSongs().get(i + previousOrNext).getPath();
 
                                 try {
@@ -752,11 +753,12 @@ public class MainFrame extends JFrame {
                         for (; i < size; i++) {
                             if (playLists.getAlbumArrayList().get(j).getSongs().get(i).getPath().equals(pathSong)) {
                                 musicPlayer.stop();
-                                southPanel.removeSongNAme();
+                                southPanel.removeArtwork();
                                 movingBarSize = playLists.getAlbumArrayList().get(j).getSongs().get(i + previousOrNext).getTimeOfSong();
                                 southPanel.removeMovingBar();
                                 southPanel.addMovingBar(movingBarSize);
-                                southPanel.addSongNameAndImage(playLists.getAlbumArrayList().get(j).getSongs().get(i + previousOrNext));
+                                southPanel.movingBarIcon.addMouseListener(new addMouseListener());
+                                southPanel.addArtwork(playLists.getAlbumArrayList().get(j).getSongs().get(i + previousOrNext));
                                 pathSong = playLists.getAlbumArrayList().get(j).getSongs().get(i + previousOrNext).getPath();
                                 try {
 
@@ -878,7 +880,6 @@ public class MainFrame extends JFrame {
             int range = getMaximum() - getMinimum();
             double newVal = range * percent;
             int result = (int) (getMinimum() + newVal);
-            System.out.println(result);
             southPanel.stopMovingBar2();
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {

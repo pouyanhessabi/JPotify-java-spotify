@@ -45,12 +45,14 @@ public class UserFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panel=new JPanel();
         panel.setBackground(Color.BLACK);
-        panel.setLayout(new GridLayout(3,1));
-        JLabel label=new JLabel("                                                  enter your name:   ");
+        panel.setLayout(new BorderLayout());
+
+        JLabel label=new JLabel("                 We don't have your name , do you want to tell us?  ''Warning'': We may achieve your files!   ");
         label.setBackground(Color.BLACK);
         label.setForeground(Color.green);
-        label.setPreferredSize(new Dimension(200,50));
-        button1=new JButton("Sign in");
+        label.setPreferredSize(new Dimension(400,100));
+
+        button1=new JButton("(1)  Yes,No Problem");
         button1.setBackground(Color.BLACK);
         button1.setForeground(Color.green);
         button1.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -59,11 +61,24 @@ public class UserFrame extends JFrame {
         button1.setContentAreaFilled(false);
         button1.setPreferredSize(new Dimension(200,50));
         button1.addActionListener(new TextListener());
+
+
+        JButton button0=new JButton("(0) : is always false!");
+        button0.setBackground(Color.BLACK);
+        button0.setForeground(Color.green);
+        button0.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button0.setBorderPainted(false);
+        button0.setFocusPainted(false);
+        button0.setContentAreaFilled(false);
+        button0.setPreferredSize(new Dimension(200,50));
+        button0.addActionListener(new ListenerForNo());
+
         textField=new JTextField();
-        textField.setPreferredSize(new Dimension(200,10));
-        panel.add(label);
-        panel.add(textField);
-        panel.add(button1);
+        textField.setPreferredSize(new Dimension(300,50));
+        panel.add(label,BorderLayout.PAGE_START);
+        panel.add(button1,BorderLayout.WEST);
+        panel.add(button0,BorderLayout.EAST);
+        panel.add(textField,BorderLayout.SOUTH);
         this.add(panel);
         this.setVisible(true);
 
@@ -77,7 +92,6 @@ public class UserFrame extends JFrame {
         public synchronized void actionPerformed(ActionEvent e) {
             if (e.getSource() == getButton1()) {
                 setText(getTextField().getText());
-                System.out.println(getTextField().getText());
                 setTmpCheck(true);
                 closeTheFrame();
             }
